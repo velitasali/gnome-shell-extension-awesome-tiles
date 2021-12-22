@@ -1,0 +1,3 @@
+var GAP_SIZE_INCREMENTS = 5
+
+var GAP_SIZE_MAX = 25

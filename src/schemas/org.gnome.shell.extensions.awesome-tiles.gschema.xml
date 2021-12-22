@@ -1,0 +1,117 @@
+<schemalist gettext-domain="awesome-tiles@velitasali.com">
+  <schema id="org.gnome.shell.extensions.awesome-tiles" path="/org/gnome/shell/extensions/awesome-tiles/">
+    <key name="gap-size" type="i">
+      <default>15</default>
+      <summary>Gap Between Window and Workspace</summary>
+      <description>Percentage to leave out as gap when the window in focus is tiled.</description>
+    </key>
+    <key name="shortcut-tile-window-to-center" type="as">
+      <default>
+        <![CDATA[['<Super>KP_5']]]>
+      </default>
+      <summary>Tile Window to Center</summary>
+      <description>
+        Shortcut to tile the window in focus to center.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-left" type="as">
+      <default>
+        <![CDATA[['<Super>KP_4']]]>
+      </default>
+      <summary>Tile Window to Left</summary>
+      <description>
+        Shortcut to tile the window in focus to left.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-right" type="as">
+      <default>
+        <![CDATA[['<Super>KP_6']]]>
+      </default>
+      <summary>Tile Window to Right</summary>
+      <description>
+        Shortcut to tile the window in focus to right.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-top" type="as">
+      <default>
+        <![CDATA[['<Super>KP_8']]]>
+      </default>
+      <summary>Tile Window to Top</summary>
+      <description>
+        Shortcut to tile the window in focus to top.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-top-left" type="as">
+      <default>
+        <![CDATA[['<Super>KP_7']]]>
+      </default>
+      <summary>Tile Window to Top Left</summary>
+      <description>
+        Shortcut to tile the window in focus to top left.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-top-right" type="as">
+      <default>
+        <![CDATA[['<Super>KP_9']]]>
+      </default>
+      <summary>Tile Window to Top Right</summary>
+      <description>
+        Shortcut to tile the window in focus to top right.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-bottom" type="as">
+      <default>
+        <![CDATA[['<Super>KP_2']]]>
+      </default>
+      <summary>Tile Window to Bottom</summary>
+      <description>
+        Shortcut to tile the window in focus to bottom.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-bottom-left" type="as">
+      <default>
+        <![CDATA[['<Super>KP_1']]]>
+      </default>
+      <summary>Tile Window to Bottom Left</summary>
+      <description>
+        Shortcut to tile the window in focus to bottom left.
+      </description>
+    </key>
+    <key name="shortcut-tile-window-to-bottom-right" type="as">
+      <default>
+        <![CDATA[['<Super>KP_3']]]>
+      </default>
+      <summary>Tile Window to Bottom Right</summary>
+      <description>
+        Shortcut to tile the window in focus to bottom right.
+      </description>
+    </key>
+    <key name="shortcut-align-window-to-center" type="as">
+      <default>
+        <![CDATA[['<Super>KP_0']]]>
+      </default>
+      <summary>Align Window to Center</summary>
+      <description>
+        Shortcut to align the window in focus to center without resizing it.
+      </description>
+    </key>
+    <key name="shortcut-increase-gap-size" type="as">
+      <default>
+        <![CDATA[['<Super>KP_Add']]]>
+      </default>
+      <summary>Increase the Gap Size</summary>
+      <description>
+        Shortcut to increase the gap size by 5.
+      </description>
+    </key>
+    <key name="shortcut-decrease-gap-size" type="as">
+      <default>
+        <![CDATA[['<Super>KP_Subtract']]]>
+      </default>
+      <summary>Decrease the Gap Size</summary>
+      <description>
+        Shortcut to decrease the gap size by 5.
+      </description>
+    </key>
+  </schema>
+</schemalist>

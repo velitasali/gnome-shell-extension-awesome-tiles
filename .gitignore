@@ -1,0 +1,7 @@
+/build/
+gschemas.compiled
+*~
+*.gmo
+*.mo
+*.zip
+node_modules
