@@ -4,6 +4,8 @@ Awesome Tiles is a tiling manager extension for GNOME Shell that makes it easy t
 windows around with precision. It does that with reconfigurable keyboard shortcuts 
 which are set to keys on the number pad by default.
 
+![The extension overview GIF](overview.gif)
+
 ## Features
 
 * Tile windows in 9 different ways.
