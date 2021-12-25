@@ -17,7 +17,8 @@ which are set to keys on the number pad by default.
 
 ### From GNOME Extensions (Recommended)
 
-*The link to the GNOME Extensions page will be added once the extension is approved.*
+1. Go to <https://extensions.gnome.org/extension/4702/awesome-tiles/>
+2. Install and Enable.
 
 ### From source code
 
