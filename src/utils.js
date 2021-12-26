@@ -1,3 +1,5 @@
+const { Gdk, Gtk } = imports.gi
+
 function isKeyvalForbidden(keyval) {
   const forbiddenKeyvals = [
     Gdk.KEY_Home,
