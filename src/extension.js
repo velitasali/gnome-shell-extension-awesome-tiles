@@ -153,15 +153,30 @@ class Extension {
     const window = global.display.get_focus_window()
     if (!window) return
 
+    const prev = this._previousTilingOperation
+    const windowId = window.get_id()
+    const successive = prev && prev.id == windowId && prev.t == top && prev.b == bottom
+      && prev.l == left && prev.r == right
+    const secondIteration = prev && prev.second
+
+    const gridSize = successive ? 3 : 2
+    const gridSpanBase = !successive || secondIteration ? 1 : 2
+    const gridSpanX = left && right ? gridSize : gridSpanBase
+    const gridSpanY = top && bottom ? gridSize : gridSpanBase
+
     const area = this._calculateArea(window)
 
-    const x = left ? area.x : area.x + area.w / 2
-    const y = top ? area.y : area.y + area.h / 2
-    const w = left && right ? area.w : area.w / 2
-    const h = top && bottom ? area.h : area.h / 2
+    const w = gridSize == gridSpanX ? area.w : Math.round(area.w / gridSize) * gridSpanX
+    const h = gridSize == gridSpanY ? area.h : Math.round(area.h / gridSize) * gridSpanY
+    const x = area.x + (left ? 0 : area.w - w)
+    const y = area.y + (top ? 0 : area.h - h)
 
     window.unmaximize(Meta.MaximizeFlags.BOTH)
     window.move_resize_frame(false, x, y, w, h)
+
+    this._previousTilingOperation = secondIteration ? undefined : {
+      id: windowId, t: top, b: bottom, l: left, r: right, second: successive && !secondIteration
+    }
   }
 
   _tileWindowBottom() {
