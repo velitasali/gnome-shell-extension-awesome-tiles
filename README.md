@@ -12,6 +12,7 @@ which are set to keys on the number pad by default.
 * Align windows to the center of a workspace.
 * Configure keyboard shortcuts to your liking.
 * Add a gap around tiled windows.
+* Successive key presses tile windows with different grid options.
 
 ## Installation
 
