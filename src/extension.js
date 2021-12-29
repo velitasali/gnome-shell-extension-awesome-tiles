@@ -102,9 +102,12 @@ class Extension {
       w: workspaceArea.width,
     }
 
+    const gapUncheckedX = Math.round(gap / 200 * workspaceArea.width)
+    const gapUncheckedY = Math.round(gap / 200 * workspaceArea.height)
+
     const gaps = {
-      x: Math.round(gap / 200 * workspaceArea.width),
-      y: Math.round(gap / 200 * workspaceArea.height),
+      x: Math.min(gapUncheckedX, gapUncheckedY * 2),
+      y: Math.min(gapUncheckedY, gapUncheckedX * 2),
     }
 
     return {
