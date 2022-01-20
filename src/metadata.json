@@ -5,7 +5,8 @@
   "settings-schema": "org.gnome.shell.extensions.awesome-tiles",
   "shell-version": [
     "40",
-    "41"
+    "41",
+    "42"
   ],
   "url": "https://github.com/velitasali/gnome-awesome-tiles-extension",
   "uuid": "awesome-tiles@velitasali.com",
