@@ -185,7 +185,7 @@ class Extension {
         w -= area.gaps.x / 2;
       }
       if (top !== bottom) {
-        if (bottom) y -= area.gaps.y / 2;
+        if (bottom) y += area.gaps.y / 2;
         h -= area.gaps.y / 2;
       }
     }
