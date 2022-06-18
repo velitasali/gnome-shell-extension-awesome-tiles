@@ -115,6 +115,7 @@ class Extension {
       y: workspaceArea.y + gaps.y,
       h: workspaceArea.height - (gaps.y * 2),
       w: workspaceArea.width - (gaps.x * 2),
+      gaps,
     }
   }
 
@@ -152,6 +153,10 @@ class Extension {
     )
   }
 
+  get _isInnerGapsEnabled() {
+    return this._settings.get_boolean("enable-inner-gaps")
+  }
+
   _tileWindow(top, bottom, left, right) {
     const window = global.display.get_focus_window()
     if (!window) return
@@ -169,10 +174,21 @@ class Extension {
 
     const area = this._calculateArea(window)
 
-    const w = gridSize == gridSpanX ? area.w : Math.round(area.w / gridSize) * gridSpanX
-    const h = gridSize == gridSpanY ? area.h : Math.round(area.h / gridSize) * gridSpanY
-    const x = area.x + (left ? 0 : area.w - w)
-    const y = area.y + (top ? 0 : area.h - h)
+    let w = gridSize == gridSpanX ? area.w : Math.round(area.w / gridSize) * gridSpanX
+    let h = gridSize == gridSpanY ? area.h : Math.round(area.h / gridSize) * gridSpanY
+    let x = area.x + (left ? 0 : area.w - w)
+    let y = area.y + (top ? 0 : area.h - h)
+
+    if (this._isInnerGapsEnabled && area.gaps !== undefined) {
+      if (left !== right) {
+        if (right) x += area.gaps.x / 2;
+        w -= area.gaps.x / 2;
+      }
+      if (top !== bottom) {
+        if (bottom) y -= area.gaps.y / 2;
+        h -= area.gaps.y / 2;
+      }
+    }
 
     window.unmaximize(Meta.MaximizeFlags.BOTH)
     window.move_resize_frame(false, x, y, w, h)

@@ -29,6 +29,7 @@ const PrefsWidget = GObject.registerClass({
   Template: Me.dir.get_child('prefs.ui').get_uri(),
   InternalChildren: [
     'gap_size',
+    'gaps_between_windows',
     'align_window_to_center',
     'increase_gap_size',
     'decrease_gap_size',
@@ -70,7 +71,14 @@ const PrefsWidget = GObject.registerClass({
       'gap-size',
       this._gap_size,
       'value',
-      Gio.SettingsBindFlags.DEFAULT
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
+    this._settings.bind(
+      'enable-inner-gaps',
+      this._gaps_between_windows,
+      'active',
+      Gio.SettingsBindFlags.DEFAULT,
     )
 
     this._shortcutWidgets.forEach((widget) => {

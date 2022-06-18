@@ -113,5 +113,12 @@
         Shortcut to decrease the gap size by 5.
       </description>
     </key>
+    <key name="enable-inner-gaps" type="b">
+      <default>true</default>
+      <summary>Enable Inner Gaps</summary>
+      <description>
+        Put gaps between windows.
+      </description>
+    </key>
   </schema>
 </schemalist>
