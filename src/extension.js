@@ -26,7 +26,7 @@ const Me = ExtensionUtils.getCurrentExtension()
 const Constants = Me.imports.constants
 
 const Domain = Gettext.domain(Me.metadata.uuid)
-const ngettext = Domain.ngettext
+const { ngettext } = Domain
 
 const _shortcutsBindingIds = []
 

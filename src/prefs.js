@@ -18,11 +18,15 @@
  */
 
 const { Gdk, Gio, GLib, GObject, Gtk } = imports.gi
+const Gettext = imports.gettext
 const ExtensionUtils = imports.misc.extensionUtils
 
 const Me = ExtensionUtils.getCurrentExtension()
 const Constants = Me.imports.constants
 const Utils = Me.imports.utils
+
+const Domain = Gettext.domain(Me.metadata.uuid)
+const { gettext } = Domain
 
 const PrefsWidget = GObject.registerClass({
   GTypeName: 'AwesomeTilesPrefsWidget',
@@ -97,7 +101,8 @@ const PrefsWidget = GObject.registerClass({
   }
 
   _reloadShortcutWidget(widget) {
-    widget.label = this._settings.get_strv(widget.get_name())[0]
+    const shortcut = this._settings.get_strv(widget.get_name())
+    widget.label = shortcut?.length > 0 ? shortcut[0] : gettext('Disabled');
   }
 
   _reloadShortcutWidgets() {
@@ -128,18 +133,19 @@ const ShortcutDialog = class {
         return Gdk.EVENT_STOP
       }
 
-      if (!Utils.isBindingValid({ mask, keycode, keyval }) || !Utils.isAccelValid({ mask, keyval })) {
-        return Gdk.EVENT_STOP
+      if (keyval === Gdk.KEY_BackSpace) {
+        settings.set_strv(shortcut, [])
+        this.widget.close()
+      } else if (Utils.isBindingValid({ mask, keycode, keyval }) && Utils.isAccelValid({ mask, keyval })) {
+        const binding = Gtk.accelerator_name_with_keycode(
+          null,
+          keyval,
+          keycode,
+          mask
+        )
+        settings.set_strv(shortcut, [binding])
+        this.widget.close()
       }
-
-      const binding = Gtk.accelerator_name_with_keycode(
-        null,
-        keyval,
-        keycode,
-        mask
-      )
-      settings.set_strv(shortcut, [binding])
-      this.widget.close()
 
       return Gdk.EVENT_STOP
     })
