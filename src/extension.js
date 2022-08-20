@@ -89,7 +89,7 @@ class Extension {
     _shortcutsBindingIds.push(name)
   }
 
-  _calculateArea(window) {
+  _calculateWorkspaceArea(window) {
     const monitor = window.get_monitor()
     const workspace = window.get_workspace()
     const workspaceArea = workspace.get_work_area_for_monitor(monitor)
@@ -165,28 +165,31 @@ class Extension {
     const windowId = window.get_id()
     const successive = prev && prev.id == windowId && prev.t == top && prev.b == bottom
       && prev.l == left && prev.r == right
-    const secondIteration = prev && prev.second
+    const secondIteration = successive && prev.second
 
     const gridSize = successive ? 3 : 2
     const gridSpanBase = !successive || secondIteration ? 1 : 2
     const gridSpanX = left && right ? gridSize : gridSpanBase
     const gridSpanY = top && bottom ? gridSize : gridSpanBase
 
-    const area = this._calculateArea(window)
+    const workArea = this._calculateWorkspaceArea(window)
 
-    let w = gridSize == gridSpanX ? area.w : Math.round(area.w / gridSize) * gridSpanX
-    let h = gridSize == gridSpanY ? area.h : Math.round(area.h / gridSize) * gridSpanY
-    let x = area.x + (left ? 0 : area.w - w)
-    let y = area.y + (top ? 0 : area.h - h)
+    // Special case - when tiling to the center we want the largest size to cover the whole available space
+    const centerFactor = !(top || bottom || left || right) ? 1.5 : 1;
 
-    if (this._isInnerGapsEnabled && area.gaps !== undefined) {
+    let w = gridSize == gridSpanX ? workArea.w : Math.round(workArea.w * centerFactor / gridSize) * gridSpanX
+    let h = gridSize == gridSpanY ? workArea.h : Math.round(workArea.h * centerFactor / gridSize) * gridSpanY
+    let x = workArea.x + (left ? 0 : right ? workArea.w - w : (workArea.w - w) / 2)
+    let y = workArea.y + (top ? 0 : bottom? workArea.h - h : (workArea.h - h) / 2)
+
+    if (this._isInnerGapsEnabled && workArea.gaps !== undefined) {
       if (left !== right) {
-        if (right) x += area.gaps.x / 2;
-        w -= area.gaps.x / 2;
+        if (right) x += workArea.gaps.x / 2;
+        w -= workArea.gaps.x / 2;
       }
       if (top !== bottom) {
-        if (bottom) y += area.gaps.y / 2;
-        h -= area.gaps.y / 2;
+        if (bottom) y += workArea.gaps.y / 2;
+        h -= workArea.gaps.y / 2;
       }
     }
 
@@ -211,7 +214,7 @@ class Extension {
   }
 
   _tileWindowCenter() {
-    this._tileWindow(true, true, true, true)
+    this._tileWindow(false, false, false, false)
   }
 
   _tileWindowLeft() {
