@@ -1,3 +1,7 @@
 var GAP_SIZE_INCREMENTS = 5
 
 var GAP_SIZE_MAX = 25
+
+var TILE_STEPS_CENTER = [0, 0.25, 0.5]
+
+var TILE_STEPS_SIDE = [0.5, 0.35, 0.65]

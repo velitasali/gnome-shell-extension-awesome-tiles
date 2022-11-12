@@ -23,7 +23,12 @@ const Main = imports.ui.main
 const { Meta, Shell } = imports.gi
 
 const Me = ExtensionUtils.getCurrentExtension()
-const Constants = Me.imports.constants
+const {
+  GAP_SIZE_MAX,
+  GAP_SIZE_INCREMENTS,
+  TILE_STEPS_CENTER,
+  TILE_STEPS_SIDE,
+} = Me.imports.constants
 
 const Domain = Gettext.domain(Me.metadata.uuid)
 const { ngettext } = Domain
@@ -98,8 +103,8 @@ class Extension {
     if (gap <= 0) return {
       x: workspaceArea.x,
       y: workspaceArea.y,
-      h: workspaceArea.height,
-      w: workspaceArea.width,
+      height: workspaceArea.height,
+      width: workspaceArea.width,
     }
 
     const gapUncheckedX = Math.round(gap / 200 * workspaceArea.width)
@@ -113,23 +118,19 @@ class Extension {
     return {
       x: workspaceArea.x + gaps.x,
       y: workspaceArea.y + gaps.y,
-      h: workspaceArea.height - (gaps.y * 2),
-      w: workspaceArea.width - (gaps.x * 2),
+      height: workspaceArea.height - (gaps.y * 2),
+      width: workspaceArea.width - (gaps.x * 2),
       gaps,
     }
   }
 
   _decreaseGapSize() {
-    if (this._gapSize > 0) {
-      this._gapSize = Math.max(this._gapSize - Constants.GAP_SIZE_INCREMENTS, 0)
-    }
+    this._gapSize = Math.max(this._gapSize - GAP_SIZE_INCREMENTS, 0)
     this._notifyGapSize()
   }
 
   _increaseGapSize() {
-    if (this._gapSize < Constants.GAP_SIZE_MAX) {
-      this._gapSize = Math.min(this._gapSize + Constants.GAP_SIZE_INCREMENTS, Constants.GAP_SIZE_MAX)
-    }
+    this._gapSize = Math.min(this._gapSize + GAP_SIZE_INCREMENTS, GAP_SIZE_MAX)
     this._notifyGapSize()
   }
 
@@ -161,44 +162,60 @@ class Extension {
     const window = global.display.get_focus_window()
     if (!window) return
 
+    const center = !(top || bottom || left || right);
     const prev = this._previousTilingOperation
     const windowId = window.get_id()
-    const successive = prev && prev.id == windowId && prev.t == top && prev.b == bottom
-      && prev.l == left && prev.r == right
-    const secondIteration = successive && prev.second
-
-    const gridSize = successive ? 3 : 2
-    const gridSpanBase = !successive || secondIteration ? 1 : 2
-    const gridSpanX = left && right ? gridSize : gridSpanBase
-    const gridSpanY = top && bottom ? gridSize : gridSpanBase
+    const successive =
+      prev &&
+      prev.windowId === windowId &&
+      prev.top === top &&
+      prev.bottom === bottom &&
+      prev.left == left &&
+      prev.right == right &&
+      prev.iteration < (center ? TILE_STEPS_CENTER : TILE_STEPS_SIDE).length
+    const iteration = successive ? prev.iteration : 0
 
     const workArea = this._calculateWorkspaceArea(window)
+    let { x, y, width, height } = workArea;
 
-    // Special case - when tiling to the center we want the largest size to cover the whole available space
-    const centerFactor = !(top || bottom || left || right) ? 1.5 : 1;
+    // Special case - when tiling to the center we want the largest size to
+    // cover the whole available space
+    if (center) {
+      const step = TILE_STEPS_CENTER[iteration]
 
-    let w = gridSize == gridSpanX ? workArea.w : Math.round(workArea.w * centerFactor / gridSize) * gridSpanX
-    let h = gridSize == gridSpanY ? workArea.h : Math.round(workArea.h * centerFactor / gridSize) * gridSpanY
-    let x = workArea.x + (left ? 0 : right ? workArea.w - w : (workArea.w - w) / 2)
-    let y = workArea.y + (top ? 0 : bottom? workArea.h - h : (workArea.h - h) / 2)
+      width -= Math.round((width * step) / 2)
+      height -= Math.round((height * step) / 2)
+      x += Math.round((workArea.width - width) / 2)
+      y += Math.round((workArea.height - height) / 2)
+    } else {
+      const step = TILE_STEPS_SIDE[iteration];
 
-    if (this._isInnerGapsEnabled && workArea.gaps !== undefined) {
       if (left !== right) {
-        if (right) x += workArea.gaps.x / 2;
-        w -= workArea.gaps.x / 2;
+        width = workArea.width - Math.round(workArea.width * step)
       }
       if (top !== bottom) {
-        if (bottom) y += workArea.gaps.y / 2;
-        h -= workArea.gaps.y / 2;
+        height = workArea.height - Math.round(workArea.height * step)
+      }
+      x += left ? 0 : (workArea.width - width) / (right ? 1 : 2)
+      y += top ? 0 : (workArea.height - height) / (bottom ? 1 : 2)
+
+      if (this._isInnerGapsEnabled && workArea.gaps !== undefined) {
+        if (left !== right) {
+          if (right) x += workArea.gaps.x / 2;
+          width -= workArea.gaps.x / 2;
+        }
+        if (top !== bottom) {
+          if (bottom) y += workArea.gaps.y / 2;
+          height -= workArea.gaps.y / 2;
+        }
       }
     }
 
     window.unmaximize(Meta.MaximizeFlags.BOTH)
-    window.move_resize_frame(false, x, y, w, h)
+    window.move_resize_frame(false, x, y, width, height)
 
-    this._previousTilingOperation = secondIteration ? undefined : {
-      id: windowId, t: top, b: bottom, l: left, r: right, second: successive && !secondIteration
-    }
+    this._previousTilingOperation =
+      { windowId, top, bottom, left, right, iteration: iteration + 1 }
   }
 
   _tileWindowBottom() {
