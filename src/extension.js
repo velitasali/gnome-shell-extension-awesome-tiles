@@ -26,9 +26,10 @@ const Me = ExtensionUtils.getCurrentExtension()
 const {
   GAP_SIZE_MAX,
   GAP_SIZE_INCREMENTS,
-  TILE_STEPS_CENTER,
-  TILE_STEPS_SIDE,
+  TILING_STEPS_CENTER,
+  TILING_STEPS_SIDE,
 } = Me.imports.constants
+const { parseTilingSteps } = Me.imports.utils
 
 const Domain = Gettext.domain(Me.metadata.uuid)
 const { ngettext } = Domain
@@ -158,6 +159,20 @@ class Extension {
     return this._settings.get_boolean("enable-inner-gaps")
   }
 
+  get _tilingStepsCenter() {
+    return parseTilingSteps(
+      this._settings.get_string("tiling-steps-center"),
+      TILING_STEPS_CENTER,
+    )
+  }
+
+  get _tilingStepsSide() {
+    return parseTilingSteps(
+      this._settings.get_string("tiling-steps-side"),
+      TILING_STEPS_SIDE,
+    )
+  }
+
   _tileWindow(top, bottom, left, right) {
     const window = global.display.get_focus_window()
     if (!window) return
@@ -165,15 +180,17 @@ class Extension {
     const center = !(top || bottom || left || right);
     const prev = this._previousTilingOperation
     const windowId = window.get_id()
+    const steps = center ? this._tilingStepsCenter : this._tilingStepsSide
     const successive =
       prev &&
       prev.windowId === windowId &&
       prev.top === top &&
       prev.bottom === bottom &&
-      prev.left == left &&
-      prev.right == right &&
-      prev.iteration < (center ? TILE_STEPS_CENTER : TILE_STEPS_SIDE).length
+      prev.left === left &&
+      prev.right === right &&
+      prev.iteration < steps.length
     const iteration = successive ? prev.iteration : 0
+    const step = 1.0 - steps[iteration]
 
     const workArea = this._calculateWorkspaceArea(window)
     let { x, y, width, height } = workArea;
@@ -181,23 +198,15 @@ class Extension {
     // Special case - when tiling to the center we want the largest size to
     // cover the whole available space
     if (center) {
-      const step = TILE_STEPS_CENTER[iteration]
-
-      width -= Math.round((width * step) / 2)
-      height -= Math.round((height * step) / 2)
+      width -= Math.round(width * step)
+      height -= Math.round(height * step)
       x += Math.round((workArea.width - width) / 2)
       y += Math.round((workArea.height - height) / 2)
     } else {
-      const step = TILE_STEPS_SIDE[iteration];
-
-      if (left !== right) {
-        width = workArea.width - Math.round(workArea.width * step)
-      }
-      if (top !== bottom) {
-        height = workArea.height - Math.round(workArea.height * step)
-      }
-      x += left ? 0 : (workArea.width - width) / (right ? 1 : 2)
-      y += top ? 0 : (workArea.height - height) / (bottom ? 1 : 2)
+      if (left !== right) width -= Math.round(width * step)
+      if (top !== bottom) height -= Math.round(height * step)
+      if (!left) x += (workArea.width - width) / (right ? 1 : 2)
+      if (!top) y += (workArea.height - height) / (bottom ? 1 : 2)
 
       if (this._isInnerGapsEnabled && workArea.gaps !== undefined) {
         if (left !== right) {

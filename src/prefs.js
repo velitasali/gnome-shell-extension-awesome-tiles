@@ -37,6 +37,8 @@ const PrefsWidget = GObject.registerClass({
     'align_window_to_center',
     'increase_gap_size',
     'decrease_gap_size',
+    'tiling_steps_center',
+    'tiling_steps_side',
     'tile_window_to_center',
     'tile_window_to_left',
     'tile_window_to_right',
@@ -82,6 +84,20 @@ const PrefsWidget = GObject.registerClass({
       'enable-inner-gaps',
       this._gaps_between_windows,
       'active',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
+    this._settings.bind(
+      'tiling-steps-center',
+      this._tiling_steps_center.buffer,
+      'text',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
+    this._settings.bind(
+      'tiling-steps-side',
+      this._tiling_steps_side.buffer,
+      'text',
       Gio.SettingsBindFlags.DEFAULT,
     )
 

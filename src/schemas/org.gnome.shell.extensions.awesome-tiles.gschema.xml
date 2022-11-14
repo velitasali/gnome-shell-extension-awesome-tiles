@@ -120,5 +120,15 @@
         Put gaps between windows.
       </description>
     </key>
+    <key name="tiling-steps-center" type="s">
+      <default><![CDATA['1, 0.75, 0.5']]></default>
+      <summary>Center Tiling Steps</summary>
+      <description>Steps on first and successive key presses when tiling.</description>
+    </key>
+    <key name="tiling-steps-side" type="s">
+      <default><![CDATA['0.5, 0.65, 0.35']]></default>
+      <summary>Side Tiling Steps</summary>
+      <description>Steps on first and successive key presses when tiling.</description>
+    </key>
   </schema>
 </schemalist>

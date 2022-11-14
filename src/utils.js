@@ -42,3 +42,19 @@ function isBindingValid({ mask, keycode, keyval }) {
 function isAccelValid({ mask, keyval }) {
   return Gtk.accelerator_valid(keyval, mask) || (keyval === Gdk.KEY_Tab && mask !== 0)
 }
+
+function parseTilingSteps(value, defaultValue) {
+  try {
+    return value
+      .split(",")
+      .map((step) => {
+        const result = Math.max(0.0, Math.min(1.0, parseFloat(step.trim())))
+        if (isNaN(result) || typeof result !== 'number') {
+          throw new Error("Expected a number")
+        }
+        return result
+      })
+  } catch {
+    return defaultValue
+  }
+}
