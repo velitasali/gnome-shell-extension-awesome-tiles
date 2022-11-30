@@ -28,6 +28,7 @@ const {
   GAP_SIZE_INCREMENTS,
   TILING_STEPS_CENTER,
   TILING_STEPS_SIDE,
+  TILING_SUCCESSIVE_TIMEOUT,
 } = Me.imports.constants
 const { parseTilingSteps } = Me.imports.utils
 
@@ -177,6 +178,7 @@ class Extension {
     const window = global.display.get_focus_window()
     if (!window) return
 
+    const time = Date.now()
     const center = !(top || bottom || left || right);
     const prev = this._previousTilingOperation
     const windowId = window.get_id()
@@ -184,6 +186,7 @@ class Extension {
     const successive =
       prev &&
       prev.windowId === windowId &&
+      time - prev.time <= TILING_SUCCESSIVE_TIMEOUT &&
       prev.top === top &&
       prev.bottom === bottom &&
       prev.left === left &&
@@ -224,7 +227,7 @@ class Extension {
     window.move_resize_frame(false, x, y, width, height)
 
     this._previousTilingOperation =
-      { windowId, top, bottom, left, right, iteration: iteration + 1 }
+      { windowId, top, bottom, left, right, time, iteration: iteration + 1 }
   }
 
   _tileWindowBottom() {
