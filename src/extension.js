@@ -75,11 +75,15 @@ class Extension {
     const workspace = window.get_workspace()
     const workspaceArea = workspace.get_work_area_for_monitor(monitor)
 
-    const x = workspaceArea.x + ((workspaceArea.width - windowArea.width) / 2)
-    const y = workspaceArea.y + ((workspaceArea.height - windowArea.height) / 2)
+    const x = Math.floor(
+      workspaceArea.x + ((workspaceArea.width - windowArea.width) / 2),
+    )
+    const y = Math.floor(
+      workspaceArea.y + ((workspaceArea.height - windowArea.height) / 2),
+    )
 
     window.unmaximize(Meta.MaximizeFlags.BOTH)
-    window.move_resize_frame(false, x, y, windowArea.width, windowArea.height)
+    window.move_frame(false, x, y)
   }
 
   _bindShortcut(name, callback) {
@@ -201,13 +205,13 @@ class Extension {
     // Special case - when tiling to the center we want the largest size to
     // cover the whole available space
     if (center) {
-      width -= Math.round(width * step)
-      height -= Math.round(height * step)
-      x += Math.round((workArea.width - width) / 2)
-      y += Math.round((workArea.height - height) / 2)
+      width -= width * step
+      height -= height * step
+      x += (workArea.width - width) / 2
+      y += (workArea.height - height) / 2
     } else {
-      if (left !== right) width -= Math.round(width * step)
-      if (top !== bottom) height -= Math.round(height * step)
+      if (left !== right) width -= width * step
+      if (top !== bottom) height -= height * step
       if (!left) x += (workArea.width - width) / (right ? 1 : 2)
       if (!top) y += (workArea.height - height) / (bottom ? 1 : 2)
 
@@ -222,6 +226,11 @@ class Extension {
         }
       }
     }
+
+    x = Math.round(x)
+    y = Math.round(y)
+    width = Math.round(width)
+    height = Math.round(height)
 
     window.unmaximize(Meta.MaximizeFlags.BOTH)
     window.move_resize_frame(false, x, y, width, height)
