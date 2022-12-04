@@ -183,7 +183,7 @@ class Extension {
     if (!window) return
 
     const time = Date.now()
-    const center = !(top || bottom || left || right);
+    const center = !(top || bottom || left || right)
     const prev = this._previousTilingOperation
     const windowId = window.get_id()
     const steps = center ? this._tilingStepsCenter : this._tilingStepsSide
@@ -200,7 +200,7 @@ class Extension {
     const step = 1.0 - steps[iteration]
 
     const workArea = this._calculateWorkspaceArea(window)
-    let { x, y, width, height } = workArea;
+    let { x, y, width, height } = workArea
 
     // Special case - when tiling to the center we want the largest size to
     // cover the whole available space
@@ -217,12 +217,12 @@ class Extension {
 
       if (this._isInnerGapsEnabled && workArea.gaps !== undefined) {
         if (left !== right) {
-          if (right) x += workArea.gaps.x / 2;
-          width -= workArea.gaps.x / 2;
+          if (right) x += workArea.gaps.x / 2
+          width -= workArea.gaps.x / 2
         }
         if (top !== bottom) {
-          if (bottom) y += workArea.gaps.y / 2;
-          height -= workArea.gaps.y / 2;
+          if (bottom) y += workArea.gaps.y / 2
+          height -= workArea.gaps.y / 2
         }
       }
     }
