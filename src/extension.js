@@ -102,25 +102,36 @@ class Extension {
 
   _calculateWorkspaceArea(window) {
     const monitor = window.get_monitor()
+    const monitorGeometry = global.display.get_monitor_geometry(monitor)
+    const isVertical = monitorGeometry.width < monitorGeometry.height
+  
     const workspace = window.get_workspace()
     const workspaceArea = workspace.get_work_area_for_monitor(monitor)
     const gap = this._gapSize
 
+    
     if (gap <= 0) return {
       x: workspaceArea.x,
       y: workspaceArea.y,
       height: workspaceArea.height,
       width: workspaceArea.width,
     }
-
+    
     const gapUncheckedX = Math.round(gap / 200 * workspaceArea.width)
     const gapUncheckedY = Math.round(gap / 200 * workspaceArea.height)
-
+    
     const gaps = {
       x: Math.min(gapUncheckedX, gapUncheckedY * 2),
       y: Math.min(gapUncheckedY, gapUncheckedX * 2),
     }
-
+    
+    // If the monitor is vertical, swap the gap values
+    if (isVertical) {
+      const temp = gaps.x
+      gaps.x = gaps.y
+      gaps.y = temp
+    }
+    
     return {
       x: workspaceArea.x + gaps.x,
       y: workspaceArea.y + gaps.y,
@@ -129,6 +140,7 @@ class Extension {
       gaps,
     }
   }
+  
 
   _decreaseGapSize() {
     this._gapSize = Math.max(this._gapSize - GAP_SIZE_INCREMENTS, 0)
@@ -202,13 +214,22 @@ class Extension {
     const workArea = this._calculateWorkspaceArea(window)
     let { x, y, width, height } = workArea
 
+
     // Special case - when tiling to the center we want the largest size to
     // cover the whole available space
     if (center) {
-      width -= width * step
-      height -= height * step
+      const monitor = window.get_monitor()
+
+      const monitorGeometry = global.display.get_monitor_geometry(monitor)
+      const isVertical = monitorGeometry.width < monitorGeometry.height
+      const widthStep = isVertical ? step / 2 : step
+      const heightStep = isVertical ? step : step / 2
+
+      width -= width * widthStep
+      height -= height * heightStep
       x += (workArea.width - width) / 2
       y += (workArea.height - height) / 2
+
     } else {
       if (left !== right) width -= width * step
       if (top !== bottom) height -= height * step
@@ -231,9 +252,17 @@ class Extension {
     y = Math.round(y)
     width = Math.round(width)
     height = Math.round(height)
-
-    window.unmaximize(Meta.MaximizeFlags.BOTH)
+    if(!center){
+      if(bottom){
+        const outerHeight = window.get_frame_rect().height;
+        const innerHeight = window.get_buffer_rect().height;
+        const titleBarHeight = Math.abs(outerHeight - innerHeight);
+        height += titleBarHeight;
+      }
+      window.unmaximize(Meta.MaximizeFlags.BOTH)
+    }
     window.move_resize_frame(false, x, y, width, height)
+
 
     this._previousTilingOperation =
       { windowId, top, bottom, left, right, time, iteration: iteration + 1 }
