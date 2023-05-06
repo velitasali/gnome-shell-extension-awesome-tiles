@@ -45,6 +45,7 @@ function init() {
 class Extension {
   enable() {
     this._settings = ExtensionUtils.getSettings()
+    this._windowAnimations = {}
 
     this._bindShortcut("shortcut-align-window-to-center", this._alignWindowToCenter.bind(this))
     this._bindShortcut("shortcut-tile-window-to-center", this._tileWindowCenter.bind(this))
@@ -189,6 +190,10 @@ class Extension {
     )
   }
 
+  get _isWindowAnimationEnabled() {
+    return this._settings.get_boolean("enable-window-animation")
+  }
+
   _actorFromWindow(window) {
     return global.get_window_actors().find(actor=>actor.meta_window == window)
   }
@@ -203,74 +208,86 @@ class Extension {
     })
   }
 
-  _setWindowRect(window, x, y, width, height, animate) {
-    const innerRect = window.get_frame_rect()
+  async _setWindowRect(window, x, y, width, height, animate) {
+    const innerRectBefore = window.get_frame_rect()
     const actor = this._actorFromWindow(window)
+    const isMaximized = window.get_maximized()
     let clone
 
     // unmaximize
-    if (window.get_maximized()) {
+    if (isMaximized) {
       // Capture window before unmaximize
       if (animate) clone = this._captureWindow(actor)
       
-      // unmaximize and reset all animations
+      // unmaximize
       window.unmaximize(Meta.MaximizeFlags.BOTH)
+    }
+
+    // reset all animations
+    if (isMaximized || this._windowAnimations[window]) {
       for (const prop of [
         ['scale_x', 1],
         ['scale_y', 1],
-        ['x', innerRect.x],
-        ['y', innerRect.y]
+        ['x', innerRectBefore.x],
+        ['y', innerRectBefore.y]
       ]) {
         actor.ease_property(prop[0],prop[1],{
           duration: 0,
         })
       }
     }
+    this._windowAnimations[window]?.destroy()
 
     // no animation
     if (!animate) {
       window.move_resize_frame(false, x, y, width, height)
       return
     }
-    
-    // Blocking inputs
-    this._onAnimation = true
 
     // Calculate size / position
-    const cloneScaleX = width/innerRect.width
-    const cloneScaleY = height/innerRect.height
-    const frameScaleX = innerRect.width/width
-    const frameScaleY = innerRect.height/height
-    const decoLeft = (innerRect.x-actor.x)
-    const decoTop = (innerRect.y-actor.y)
-
-    // Init clone and resize window
-    clone ??= this._captureWindow(actor)
+    const cloneGoalScaleX = width/innerRectBefore.width
+    const cloneGoalScaleY = height/innerRectBefore.height
+    const actorInitScaleX = innerRectBefore.width/width
+    const actorInitScaleY = innerRectBefore.height/height
+    const decoLeftBefore  = (innerRectBefore.x-actor.x)
+    const decoTopBefore   = (innerRectBefore.y-actor.y)
+    
+    // Create clone and resize real window
+    this._windowAnimations[window] = clone ??= this._captureWindow(actor)
     global.window_group.insert_child_above(clone,actor)
     window.move_resize_frame(false, x, y, width, height)
-    actor.scale_x = frameScaleX
-    actor.scale_y = frameScaleY
-    actor.x = innerRect.x - decoLeft*frameScaleX
-    actor.y = innerRect.y - decoTop*frameScaleY
+
+    // Recalculate size / position (required for real window)
+    const innerRectAfter = window.get_frame_rect()
+    const decoLeftAfter = (innerRectAfter.x-actor.x)
+    const decoTopAfter = (innerRectAfter.y-actor.y)
+
+    // Set real window actor position
+    actor.scale_x = actorInitScaleX
+    actor.scale_y = actorInitScaleY
+    actor.x = innerRectBefore.x - decoLeftBefore*actorInitScaleX
+    actor.y = innerRectBefore.y - decoTopBefore*actorInitScaleY
 
     // Create animations
     clone.ease_property('opacity', 0, {
       duration: 340,
       mode: Clutter.AnimationMode.EASE_OUT_QUART,
-      onComplete: ()=>{
-        this._onAnimation = false
-        clone.destroy()
+      onComplete: async()=>{
+        if (this._windowAnimations[window] === clone) {
+          this._windowAnimations[window].destroy()
+          this._windowAnimations[window] = null
+        }
       }
     })
     for (const prop of [
       [actor, 'scale_x', 1],
       [actor, 'scale_y', 1],
-      [actor, 'x', x - decoLeft],
-      [actor, 'y', y - decoTop],
-      [clone, 'x', x - decoLeft*cloneScaleX],
-      [clone, 'y', y - decoTop*cloneScaleY],
-      [clone, 'scale_y', cloneScaleY],
-      [clone, 'scale_x', cloneScaleX]
+      [actor, 'x', x - decoLeftAfter],
+      [actor, 'y', y - decoTopAfter],
+      [clone, 'x', x - decoLeftBefore*cloneGoalScaleX],
+      [clone, 'y', y - decoTopBefore*cloneGoalScaleY],
+      [clone, 'scale_y', cloneGoalScaleY],
+      [clone, 'scale_x', cloneGoalScaleX]
     ]) {
       prop[0].ease_property(prop[1],prop[2],{
         duration: 340,
@@ -280,8 +297,6 @@ class Extension {
   }
 
   _tileWindow(top, bottom, left, right) {
-    if (this._onAnimation) return
-
     const window = global.display.get_focus_window()
     if (!window) return
 
@@ -342,7 +357,7 @@ class Extension {
     y = Math.round(y)
     width = Math.round(width)
     height = Math.round(height)
-    this._setWindowRect(window, x, y, width, height, true)
+    this._setWindowRect(window, x, y, width, height, this._isWindowAnimationEnabled)
 
     this._previousTilingOperation =
       { windowId, top, bottom, left, right, time, iteration: iteration + 1 }

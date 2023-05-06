@@ -120,6 +120,13 @@
         Put gaps between windows.
       </description>
     </key>
+    <key name="enable-window-animation" type="b">
+      <default>true</default>
+      <summary>Enable window animation</summary>
+      <description>
+        Add animation on windows.
+      </description>
+    </key>
     <key name="tiling-steps-center" type="s">
       <default><![CDATA['1, 0.75, 0.5']]></default>
       <summary>Center Tiling Steps</summary>
