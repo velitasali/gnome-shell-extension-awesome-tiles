@@ -32,7 +32,7 @@ function compile-preferences {
 
 function restart-shell {
     echo 'Restarting shell...'
-    busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…")'
+    busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…", global.context)'
     echo 'Done'
 }
 

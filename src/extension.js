@@ -20,7 +20,7 @@
 const ExtensionUtils = imports.misc.extensionUtils
 const Gettext = imports.gettext
 const Main = imports.ui.main
-const { Meta, Shell } = imports.gi
+const { Meta, Shell, Clutter, GLib, Gio } = imports.gi
 
 const Me = ExtensionUtils.getCurrentExtension()
 const {
@@ -140,7 +140,6 @@ class Extension {
       gaps,
     }
   }
-  
 
   _decreaseGapSize() {
     this._gapSize = Math.max(this._gapSize - GAP_SIZE_INCREMENTS, 0)
@@ -190,7 +189,99 @@ class Extension {
     )
   }
 
+  _actorFromWindow(window) {
+    return global.get_window_actors().find(actor=>actor.meta_window == window)
+  }
+
+  _captureWindow(window_actor,rect) {
+    return new Clutter.Actor({
+      x: window_actor.x + (rect ? rect.x - window_actor.x : 0),
+      y: window_actor.y + (rect ? rect.y - window_actor.y : 0),
+      height: rect?.height || window_actor.height,
+      width: rect?.width || window_actor.width,
+      content: window_actor.paint_to_content(rect || null)
+    })
+  }
+
+  _setWindowRect(window, x, y, width, height, animate) {
+    const innerRect = window.get_frame_rect()
+    const actor = this._actorFromWindow(window)
+    let clone
+
+    // unmaximize
+    if (window.get_maximized()) {
+      // Capture window before unmaximize
+      if (animate) clone = this._captureWindow(actor)
+      
+      // unmaximize and reset all animations
+      window.unmaximize(Meta.MaximizeFlags.BOTH)
+      for (const prop of [
+        ['scale_x', 1],
+        ['scale_y', 1],
+        ['x', innerRect.x],
+        ['y', innerRect.y]
+      ]) {
+        actor.ease_property(prop[0],prop[1],{
+          duration: 0,
+        })
+      }
+    }
+
+    // no animation
+    if (!animate) {
+      window.move_resize_frame(false, x, y, width, height)
+      return
+    }
+    
+    // Blocking inputs
+    this._onAnimation = true
+
+    // Calculate size / position
+    const cloneScaleX = width/innerRect.width
+    const cloneScaleY = height/innerRect.height
+    const frameScaleX = innerRect.width/width
+    const frameScaleY = innerRect.height/height
+    const decoLeft = (innerRect.x-actor.x)
+    const decoTop = (innerRect.y-actor.y)
+
+    // Init clone and resize window
+    clone ??= this._captureWindow(actor)
+    global.window_group.insert_child_above(clone,actor)
+    window.move_resize_frame(false, x, y, width, height)
+    actor.scale_x = frameScaleX
+    actor.scale_y = frameScaleY
+    actor.x = innerRect.x - decoLeft*frameScaleX
+    actor.y = innerRect.y - decoTop*frameScaleY
+
+    // Create animations
+    clone.ease_property('opacity', 0, {
+      duration: 340,
+      mode: Clutter.AnimationMode.EASE_OUT_QUART,
+      onComplete: ()=>{
+        this._onAnimation = false
+        clone.destroy()
+      }
+    })
+    for (const prop of [
+      [actor, 'scale_x', 1],
+      [actor, 'scale_y', 1],
+      [actor, 'x', x - decoLeft],
+      [actor, 'y', y - decoTop],
+      [clone, 'x', x - decoLeft*cloneScaleX],
+      [clone, 'y', y - decoTop*cloneScaleY],
+      [clone, 'scale_y', cloneScaleY],
+      [clone, 'scale_x', cloneScaleX]
+    ]) {
+      prop[0].ease_property(prop[1],prop[2],{
+        duration: 340,
+        mode: Clutter.AnimationMode.EASE_OUT_EXPO
+      })
+    }
+  }
+
   _tileWindow(top, bottom, left, right) {
+    if (this._onAnimation) return
+
     const window = global.display.get_focus_window()
     if (!window) return
 
@@ -219,7 +310,6 @@ class Extension {
     // cover the whole available space
     if (center) {
       const monitor = window.get_monitor()
-
       const monitorGeometry = global.display.get_monitor_geometry(monitor)
       const isVertical = monitorGeometry.width < monitorGeometry.height
       const widthStep = isVertical ? step / 2 : step
@@ -252,17 +342,7 @@ class Extension {
     y = Math.round(y)
     width = Math.round(width)
     height = Math.round(height)
-    if(!center){
-      if(bottom){
-        const outerHeight = window.get_frame_rect().height;
-        const innerHeight = window.get_buffer_rect().height;
-        const titleBarHeight = Math.abs(outerHeight - innerHeight);
-        height += titleBarHeight;
-      }
-      window.unmaximize(Meta.MaximizeFlags.BOTH)
-    }
-    window.move_resize_frame(false, x, y, width, height)
-
+    this._setWindowRect(window, x, y, width, height, true)
 
     this._previousTilingOperation =
       { windowId, top, bottom, left, right, time, iteration: iteration + 1 }
