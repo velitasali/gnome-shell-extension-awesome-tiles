@@ -242,7 +242,7 @@ class Extension {
   // give time to redraw it selfs to application
   _delayFrames(actor) {
     return new Promise(resolve=>{
-      const timeline = new Clutter.Timeline({ actor:actor,duration: 1 })
+      const timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
       timeline.connect("new-frame",()=>{
         timeline.run_dispose()
         resolve()
