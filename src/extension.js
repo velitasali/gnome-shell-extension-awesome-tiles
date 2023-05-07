@@ -45,7 +45,7 @@ function init() {
 class Extension {
   enable() {
     this._settings = ExtensionUtils.getSettings()
-    this._windowAnimations = {}
+    this._windowAnimations = []
 
     this._bindShortcut("shortcut-align-window-to-center", this._alignWindowToCenter.bind(this))
     this._bindShortcut("shortcut-tile-window-to-center", this._tileWindowCenter.bind(this))
@@ -65,7 +65,14 @@ class Extension {
     this._settings = null
     _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
     _shortcutsBindingIds.length = 0
-    Object.values(this._windowAnimations).forEach(item=>item?.destroy())
+    this._windowAnimations.forEach(animation=>{
+      animation.clone?.destroy()
+      const actor = animation.actor
+      if (actor) {
+        actor.timeline?.run_dispose()
+        actor.timeline = null
+      }
+    })
     this._windowAnimations = null
   }
 
@@ -246,9 +253,10 @@ class Extension {
   // give time to redraw it selfs to application
   _delayFrames(actor) {
     return new Promise(resolve=>{
-      const timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
+      const timeline = actor.timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
       timeline.connect("new-frame",()=>{
         timeline.run_dispose()
+        actor.timeline = null
         resolve()
       })
       timeline.start()
@@ -260,6 +268,8 @@ class Extension {
     const outterRectBefore = window.get_buffer_rect()
     const actor = window.get_compositor_private()
     const isMaximized = window.get_maximized()
+    const lastAnimation = this._windowAnimations.find(item=>item.window === window)
+    const thisAnimation = lastAnimation || {}
     let clone
 
     // unmaximize
@@ -269,17 +279,20 @@ class Extension {
     }
 
     // reset all animations (last ani / unmaximize ani)
-    if (animate && (isMaximized || this._windowAnimations[window])) {
-      this._windowAnimations[window]?.destroy()
+    if (animate && (isMaximized || lastAnimation)) {
+      lastAnimation?.clone?.destroy()
       await this._removeWindowActorAnimation(actor)
     }
 
     // clone window, and resize meta window
-    this._windowAnimations[window] = animate && (clone ??= this._captureWindow(actor,outterRectBefore))
+    thisAnimation.clone = animate && (clone ??= this._captureWindow(actor,outterRectBefore))
+    thisAnimation.window = window
+    thisAnimation.actor = actor
     window.move_resize_frame(false, x, y, width, height)
     if (!animate) {
       return
     }
+    if (!lastAnimation) this._windowAnimations.push(thisAnimation)
 
     // Calculate before size / position
     const cloneGoalScaleX = width/innerRectBefore.width
@@ -293,7 +306,7 @@ class Extension {
     global.window_group.insert_child_above(clone,actor)
     actor.visible = false
     await this._delayFrames(actor)
-    if (this._windowAnimations[window] != clone) {
+    if (this._windowAnimations.find(item=>item.window === window).clone != clone) {
       clone.destroy()
       return
     }
@@ -316,9 +329,10 @@ class Extension {
       duration: 300,
       mode: Clutter.AnimationMode.EASE_OUT_QUART,
       onComplete: async()=>{
-        if (this._windowAnimations[window] === clone) {
-          this._windowAnimations[window].destroy()
-          this._windowAnimations[window] = null
+        const nowAnimation = this._windowAnimations.find(item=>item.window === window)
+        if (nowAnimation && nowAnimation.clone === clone) {
+          nowAnimation?.clone?.destroy()
+          this._windowAnimations.splice(this._windowAnimations.indexOf(nowAnimation),1)
         }
       }
     })
