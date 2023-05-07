@@ -65,6 +65,8 @@ class Extension {
     this._settings = null
     _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
     _shortcutsBindingIds.length = 0
+    Object.values(this._windowAnimations).forEach(item=>item.destroy())
+    this._windowAnimations = null
   }
 
   _alignWindowToCenter() {
@@ -198,8 +200,44 @@ class Extension {
     return new Clutter.Actor({
       height: rect.height,
       width: rect.width,
+      x: rect.x,
+      y: rect.y,
       content: window_actor.paint_to_content(null)
     })
+  }
+
+  // unmaximize without animation by hacking gsettings
+  _unmaximizeWithoutAnimation(window,rect) {
+    rect ??= window.get_frame_rect()
+    const desktopSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' })
+    const lastValue = desktopSettings.get_boolean("enable-animations")
+    if (lastValue) desktopSettings.set_boolean("enable-animations",false)
+    window.unmaximize(Meta.MaximizeFlags.BOTH)
+    window.move_resize_frame(false, rect.x, rect.y, rect.width, rect.height)
+    if (lastValue) desktopSettings.set_boolean("enable-animations",true)
+  }
+
+  // remove window actor's last animation (unmaximize / last ani)
+  _removeWindowActorAnimation(window_actor) {
+    return Promise.all([
+      ['scale_x', 1],
+      ['scale_y', 1],
+      ['x', window_actor.x],
+      ['y', window_actor.y]
+    ].map(prop=>
+        new Promise(resolve=>
+          window_actor.ease_property(prop[0],prop[1],{
+            duration: 1,
+            onComplete: resolve
+          })
+        )
+      )
+    )
+  }
+
+  // give time to redraw it selfs to application
+  _delayFrames() {
+    return new Promise(r=>GLib.timeout_add(GLib.PRIORITY_LOW,60,r))
   }
 
   async _setWindowRect(window, x, y, width, height, animate) {
@@ -211,32 +249,20 @@ class Extension {
 
     // unmaximize
     if (isMaximized) {
-      // Capture window before unmaximize
-      if (animate) clone = this._captureWindow(actor,outterRectBefore)
-      
-      // unmaximize
-      window.unmaximize(Meta.MaximizeFlags.BOTH)
+      clone = animate && this._captureWindow(actor,outterRectBefore)
+      this._unmaximizeWithoutAnimation(window,innerRectBefore)
     }
 
     // reset all animations (last ani / unmaximize ani)
-    if (isMaximized || this._windowAnimations[window]) {
+    if (animate && (isMaximized || this._windowAnimations[window])) {
       this._windowAnimations[window]?.destroy()
-      await Promise.all([
-        ['scale_x', 1],
-        ['scale_y', 1],
-        ['x', outterRectBefore.x],
-        ['y', outterRectBefore.y]
-      ].map(prop=>new Promise(resolve=>
-        actor.ease_property(prop[0],prop[1],{
-          duration: 0,
-          onComplete: resolve
-        })
-      )))
+      await this._removeWindowActorAnimation(actor)
     }
 
-    // no animation
+    // clone window, and resize meta window
+    this._windowAnimations[window] = animate && (clone ??= this._captureWindow(actor,outterRectBefore))
+    window.move_resize_frame(false, x, y, width, height)
     if (!animate) {
-      window.move_resize_frame(false, x, y, width, height)
       return
     }
 
@@ -247,10 +273,16 @@ class Extension {
     const actorInitScaleY = innerRectBefore.height/height
     const decoLeftBefore  = (innerRectBefore.x-outterRectBefore.x)
     const decoTopBefore   = (innerRectBefore.y-outterRectBefore.y)
-    
-    // Create clone and resize real window
-    this._windowAnimations[window] = clone ??= this._captureWindow(actor,outterRectBefore)
-    window.move_resize_frame(false, x, y, width, height)
+
+    // draw clone, and wait for real window finish drawn
+    global.window_group.insert_child_above(clone,actor)
+    actor.visible = false
+    await this._delayFrames()
+    if (this._windowAnimations[window] != clone) {
+      clone.destroy()
+      return
+    }
+    actor.visible = true
 
     // Recalculate after size / position (required for real window)
     const innerRectAfter = window.get_frame_rect()
@@ -264,16 +296,9 @@ class Extension {
     actor.x = innerRectBefore.x - decoLeftAfter*actorInitScaleX
     actor.y = innerRectBefore.y - decoTopAfter*actorInitScaleY
 
-    // set clone position and scale
-    clone.scale_y = cloneGoalScaleY
-    clone.scale_x = cloneGoalScaleX
-    clone.x = decoLeftAfter - decoLeftBefore*cloneGoalScaleX
-    clone.y = decoTopAfter - decoTopBefore*cloneGoalScaleY
-    actor.add_actor(clone)
-
     // Create animations
     clone.ease_property('opacity', 0, {
-      duration: 340,
+      duration: 300,
       mode: Clutter.AnimationMode.EASE_OUT_QUART,
       onComplete: async()=>{
         if (this._windowAnimations[window] === clone) {
@@ -285,11 +310,15 @@ class Extension {
     for (const prop of [
       [actor, 'scale_x', 1],
       [actor, 'scale_y', 1],
-      [actor, 'x', x - decoLeftAfter],
-      [actor, 'y', y - decoTopAfter]
+      [actor, 'x', x-decoLeftAfter],
+      [actor, 'y', y-decoTopAfter],
+      [clone,'scale_x',cloneGoalScaleX],
+      [clone,'scale_y',cloneGoalScaleY],
+      [clone,'x',x-decoLeftBefore*cloneGoalScaleX],
+      [clone,'y',y-decoTopBefore*cloneGoalScaleY]
     ]) {
       prop[0].ease_property(prop[1],prop[2],{
-        duration: 340,
+        duration: 300,
         mode: Clutter.AnimationMode.EASE_OUT_EXPO
       })
     }
