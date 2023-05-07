@@ -32,6 +32,7 @@ const PrefsWidget = GObject.registerClass({
   GTypeName: 'AwesomeTilesPrefsWidget',
   Template: Me.dir.get_child('prefs.ui').get_uri(),
   InternalChildren: [
+    'enable_window_animation',
     'gap_size',
     'gaps_between_windows',
     'align_window_to_center',
@@ -72,6 +73,13 @@ const PrefsWidget = GObject.registerClass({
     ]
 
     this._settings = ExtensionUtils.getSettings()
+
+    this._settings.bind(
+      'enable-window-animation',
+      this._enable_window_animation,
+      'active',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
 
     this._settings.bind(
       'gap-size',
