@@ -278,7 +278,10 @@ class Extension {
     global.window_group.insert_child_above(clone,actor)
     actor.visible = false
     await this._delayFrames()
-    if (this._windowAnimations[window] != clone) return
+    if (this._windowAnimations[window] != clone) {
+      clone.destroy()
+      return
+    }
     actor.visible = true
 
     // Recalculate after size / position (required for real window)
