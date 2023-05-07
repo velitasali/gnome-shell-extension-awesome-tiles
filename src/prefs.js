@@ -74,11 +74,10 @@ const PrefsWidget = GObject.registerClass({
 
     this._settings = ExtensionUtils.getSettings()
 
-    log("QE: this._enable_window_animation")
     this._settings.bind(
       'enable-window-animation',
       this._enable_window_animation,
-      'value',
+      'active',
       Gio.SettingsBindFlags.DEFAULT,
     )
 
