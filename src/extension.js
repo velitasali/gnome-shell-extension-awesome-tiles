@@ -63,7 +63,7 @@ class Extension {
   }
 
   disable() {
-    this._osdGapChangedIcon.destroy()
+    this._osdGapChangedIcon.run_dispose()
     this._osdGapChangedIcon = null
     this._settings = null
     _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
