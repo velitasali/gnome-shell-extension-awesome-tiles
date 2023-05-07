@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 18:11+0900\n"
+"POT-Creation-Date: 2023-05-07 18:34+0900\n"
 "PO-Revision-Date: 2021-12-31 11:30+0200\n"
 "Last-Translator: Marco Pometti <marco.pometti93@gmail.com>\n"
 "Language-Team: Italian\n"
@@ -27,7 +27,7 @@ msgid "Enable window animation"
 msgstr ""
 
 #: src/prefs.ui:41
-msgid "Add animation on windows."
+msgid "Add animation on windows. (In Wayland, this option will very buggy)"
 msgstr ""
 
 #: src/prefs.ui:79

@@ -38,7 +38,7 @@
                           <object class="GtkLabel">
                             <property name="valign">center</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Add animation on windows.</property>
+                            <property name="label" translatable="yes">Add animation on windows. (In Wayland, this option will very buggy)</property>
                             <property name="use-markup">1</property>
                             <property name="wrap">1</property>
                             <property name="max-width-chars">50</property>
