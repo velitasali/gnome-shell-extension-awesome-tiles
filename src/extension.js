@@ -46,7 +46,7 @@ class Extension {
   enable() {
     this._settings = ExtensionUtils.getSettings()
     this._windowAnimations = []
-    this.osdIcon = Gio.icon_new_for_string("edit-select-all-symbolic")
+    this._osdGapChangedIcon = Gio.icon_new_for_string("view-grid-symbolic")
 
     this._bindShortcut("shortcut-align-window-to-center", this._alignWindowToCenter.bind(this))
     this._bindShortcut("shortcut-tile-window-to-center", this._tileWindowCenter.bind(this))
@@ -63,8 +63,8 @@ class Extension {
   }
 
   disable() {
-    this.osdIcon.destroy()
-    this.osdIcon = null
+    this._osdGapChangedIcon.destroy()
+    this._osdGapChangedIcon = null
     this._settings = null
     _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
     _shortcutsBindingIds.length = 0
@@ -178,7 +178,7 @@ class Extension {
 
   _notifyGapSize() {
     const gapSize = this._gapSize
-    Main.osdWindowManager.show(-1,Gio.icon_new_for_string("edit-select-all-symbolic"),
+    Main.osdWindowManager.show(-1,this._osdGapChangedIcon,
       ngettext(
         'Gap size is now at %d percent',
         'Gap size is now at %d percent',
