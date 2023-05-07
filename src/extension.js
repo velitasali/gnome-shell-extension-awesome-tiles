@@ -208,7 +208,7 @@ class Extension {
     })
   }
 
-  async _setWindowRect(window, x, y, width, height, animate) {
+  _setWindowRect(window, x, y, width, height, animate) {
     const innerRectBefore = window.get_frame_rect()
     const actor = this._actorFromWindow(window)
     const isMaximized = window.get_maximized()
@@ -223,7 +223,7 @@ class Extension {
       window.unmaximize(Meta.MaximizeFlags.BOTH)
     }
 
-    // reset all animations
+    // reset all animations (last ani / unmaximize ani)
     if (isMaximized || this._windowAnimations[window]) {
       for (const prop of [
         ['scale_x', 1],
@@ -259,8 +259,8 @@ class Extension {
 
     // Recalculate size / position (required for real window)
     const innerRectAfter = window.get_frame_rect()
-    const decoLeftAfter = (innerRectAfter.x-actor.x)
-    const decoTopAfter = (innerRectAfter.y-actor.y)
+    const decoLeftAfter  = (innerRectAfter.x-actor.x)
+    const decoTopAfter   = (innerRectAfter.y-actor.y)
 
     // Set real window actor position
     actor.scale_x = actorInitScaleX
