@@ -144,13 +144,17 @@ class Extension {
     }
   }
 
+  get _gapSizeIncrements() {
+    return this._settings.get_int("gap-size-increments")
+  }
+
   _decreaseGapSize() {
-    this._gapSize = Math.max(this._gapSize - GAP_SIZE_INCREMENTS, 0)
+    this._gapSize = Math.max(this._gapSize - this._gapSizeIncrements, 0)
     this._notifyGapSize()
   }
 
   _increaseGapSize() {
-    this._gapSize = Math.min(this._gapSize + GAP_SIZE_INCREMENTS, GAP_SIZE_MAX)
+    this._gapSize = Math.min(this._gapSize + this._gapSizeIncrements, GAP_SIZE_MAX)
     this._notifyGapSize()
   }
 

@@ -34,6 +34,7 @@ const PrefsWidget = GObject.registerClass({
   InternalChildren: [
     'enable_window_animation',
     'next_step_timeout',
+    'gap_size_increments',
     'gap_size',
     'gaps_between_windows',
     'align_window_to_center',
@@ -85,6 +86,13 @@ const PrefsWidget = GObject.registerClass({
     this._settings.bind(
       'next-step-timeout',
       this._next_step_timeout,
+      'value',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
+    this._settings.bind(
+      'gap-size-increments',
+      this._gap_size_increments,
       'value',
       Gio.SettingsBindFlags.DEFAULT,
     )

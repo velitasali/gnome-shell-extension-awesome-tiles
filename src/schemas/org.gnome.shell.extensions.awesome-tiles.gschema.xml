@@ -101,7 +101,7 @@
       </default>
       <summary>Increase the Gap Size</summary>
       <description>
-        Shortcut to increase the gap size by 5.
+        Shortcut to increase the gap size.
       </description>
     </key>
     <key name="shortcut-decrease-gap-size" type="as">
@@ -110,7 +110,7 @@
       </default>
       <summary>Decrease the Gap Size</summary>
       <description>
-        Shortcut to decrease the gap size by 5.
+        Shortcut to decrease the gap size.
       </description>
     </key>
     <key name="enable-inner-gaps" type="b">
@@ -131,6 +131,11 @@
       <default>2000</default>
       <summary>Keybinding iterate timeout</summary>
       <description>Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds.</description>
+    </key>
+    <key name="gap-size-increments" type="i">
+      <default>5</default>
+      <summary>Gap Size Increments</summary>
+      <description>Determine how much gap size adjust by keybinding.</description>
     </key>
     <key name="tiling-steps-center" type="s">
       <default><![CDATA['1, 0.75, 0.5']]></default>

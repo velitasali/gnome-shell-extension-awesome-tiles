@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 03:08+0900\n"
+"POT-Creation-Date: 2023-05-08 04:02+0900\n"
 "PO-Revision-Date: 2021-12-31 11:30+0200\n"
 "Last-Translator: Marco Pometti <marco.pometti93@gmail.com>\n"
 "Language-Team: Italian\n"
@@ -47,118 +47,126 @@ msgid "Maximum time of you can adjust tiling step by iterating same keybinding i
 msgstr ""
 
 #: src/prefs.ui:176
-msgid "Gaps Between Windows"
+msgid "Gap Size Increments"
 msgstr ""
 
 #: src/prefs.ui:183
+msgid "Determine how much gap size adjust by keybinding."
+msgstr ""
+
+#: src/prefs.ui:228
+msgid "Gaps Between Windows"
+msgstr ""
+
+#: src/prefs.ui:235
 msgid "Put gaps between windows."
 msgstr ""
 
-#: src/prefs.ui:221
+#: src/prefs.ui:273
 msgid "Center Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:228 src/prefs.ui:274
+#: src/prefs.ui:280 src/prefs.ui:326
 msgid "Steps on each key press (values between 0-1)."
 msgstr ""
 
-#: src/prefs.ui:267
+#: src/prefs.ui:319
 msgid "Side Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:313
+#: src/prefs.ui:365
 msgid "Align Window to Center"
 msgstr "Allinea la Finestra al Centro"
 
-#: src/prefs.ui:320
+#: src/prefs.ui:372
 msgid "Shortcut to align the window in focus to center without resizing it."
 msgstr "Scorciatoia per allineare la finestra in primo piano al centro senza ridimensionarla."
 
-#: src/prefs.ui:360
+#: src/prefs.ui:412
 msgid "Increase the Gap Size"
 msgstr "Aumenta la Dimensione del Margine"
 
-#: src/prefs.ui:367
-msgid "Shortcut to increase the gap size by 5."
-msgstr "Scorciatoia per aumentare la dimensione del margine di 5."
+#: src/prefs.ui:419
+msgid "Shortcut to increase the gap size."
+msgstr ""
 
-#: src/prefs.ui:407
+#: src/prefs.ui:459
 msgid "Decrease the Gap Size"
 msgstr "Riduci la Dimensione del Margine"
 
-#: src/prefs.ui:414
-msgid "Shortcut to decrease the gap size by 5."
-msgstr "Scorciatoia per diminuire la dimensione del margine di 5."
+#: src/prefs.ui:466
+msgid "Shortcut to decrease the gap size."
+msgstr ""
 
-#: src/prefs.ui:454
+#: src/prefs.ui:506
 msgid "Tile Window to Center"
 msgstr "Affianca Finestra al Centro"
 
-#: src/prefs.ui:461
+#: src/prefs.ui:513
 msgid "Shortcut to tile the window in focus to center."
 msgstr "Scorciatoia per affiancare la finestra in primo piano al centro."
 
-#: src/prefs.ui:501
+#: src/prefs.ui:553
 msgid "Tile Window to Left"
 msgstr "Affianca Finestra a Sinistra"
 
-#: src/prefs.ui:508
+#: src/prefs.ui:560
 msgid "Shortcut to tile the window in focus to left."
 msgstr "Scorciatoia per affiancare la finestra in primo piano a sinistra."
 
-#: src/prefs.ui:548
+#: src/prefs.ui:600
 msgid "Tile Window to Right"
 msgstr "Affianca Finestra a Destra"
 
-#: src/prefs.ui:555
+#: src/prefs.ui:607
 msgid "Shortcut to tile the window in focus to right."
 msgstr "Scorciatoia per affiancare la finestra in primo piano a destra."
 
-#: src/prefs.ui:595
+#: src/prefs.ui:647
 msgid "Tile Window to Top"
 msgstr "Affianca Finestra in Alto"
 
-#: src/prefs.ui:602
+#: src/prefs.ui:654
 msgid "Shortcut to tile the window in focus to top."
 msgstr "Scorciatoia per affiancare la finestra in primo piano in alto."
 
-#: src/prefs.ui:642
+#: src/prefs.ui:694
 msgid "Tile Window to Bottom"
 msgstr "Affianca Finestra in Basso"
 
-#: src/prefs.ui:649
+#: src/prefs.ui:701
 msgid "Shortcut to tile the window in focus to bottom."
 msgstr "Scorciatoia per affiancare la finestra in primo piano in basso."
 
-#: src/prefs.ui:689
+#: src/prefs.ui:741
 msgid "Tile Window to Top Left"
 msgstr "Affianca Finestra in Alto a Sinistra"
 
-#: src/prefs.ui:696
+#: src/prefs.ui:748
 msgid "Shortcut to tile the window in focus to top left."
 msgstr "Scorciatoia per affiancare la finestra in primo piano in alto a sinistra."
 
-#: src/prefs.ui:736
+#: src/prefs.ui:788
 msgid "Tile Window to Top Right"
 msgstr "Affianca Finestra in Alto a Destra"
 
-#: src/prefs.ui:743
+#: src/prefs.ui:795
 msgid "Shortcut to tile the window in focus to top right."
 msgstr "Scorciatoia per affiancare la finestra in primo piano in alto a destra."
 
-#: src/prefs.ui:783
+#: src/prefs.ui:835
 msgid "Tile Window to Bottom Left"
 msgstr "Affianca Finestra in Basso a Sinistra"
 
-#: src/prefs.ui:790
+#: src/prefs.ui:842
 msgid "Shortcut to tile the window in focus to bottom left."
 msgstr "Scorciatoia per affiancare la finestra in primo piano in basso a sinistra."
 
-#: src/prefs.ui:830
+#: src/prefs.ui:882
 msgid "Tile Window to Bottom Right"
 msgstr "Affianca la Finestra in Basso a Destra"
 
-#: src/prefs.ui:837
+#: src/prefs.ui:889
 msgid "Shortcut to tile the window in focus to bottom right."
 msgstr "Scorciatoia per affiancare la finestra in primo piano in basso a destra."
 
@@ -170,12 +178,18 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr "Scorciatoia da Tastiera"
 
-#: src/extension.js:170
+#: src/extension.js:174
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"
 msgstr[0] "La dimensione del margine è impostata al %d percento"
 msgstr[1] "La dimensione del margine è impostata al %d percento"
+
+#~ msgid "Shortcut to increase the gap size by 5."
+#~ msgstr "Scorciatoia per aumentare la dimensione del margine di 5."
+
+#~ msgid "Shortcut to decrease the gap size by 5."
+#~ msgstr "Scorciatoia per diminuire la dimensione del margine di 5."
 
 #~ msgid "Press your keyboard shortcut..."
 #~ msgstr "Premi la scorciatoia da tastiera..."
