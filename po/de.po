@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 02:43+0900\n"
+"POT-Creation-Date: 2023-05-08 03:08+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,126 +39,126 @@ msgid "Percentage to leave out as gap when the window in focus is tiled."
 msgstr "Abstand in Prozent für Platz von Fenstern mit Focus, welche gekachelt sind."
 
 #: src/prefs.ui:124
-msgid "Gaps Between Windows"
-msgstr ""
-
-#: src/prefs.ui:131
-msgid "Put gaps between windows."
-msgstr ""
-
-#: src/prefs.ui:169
 msgid "Keybinding iterate timeout"
 msgstr ""
 
-#: src/prefs.ui:176
+#: src/prefs.ui:131
 msgid "Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds."
 msgstr ""
 
-#: src/prefs.ui:214
+#: src/prefs.ui:176
+msgid "Gaps Between Windows"
+msgstr ""
+
+#: src/prefs.ui:183
+msgid "Put gaps between windows."
+msgstr ""
+
+#: src/prefs.ui:221
 msgid "Center Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:221 src/prefs.ui:267
+#: src/prefs.ui:228 src/prefs.ui:274
 msgid "Steps on each key press (values between 0-1)."
 msgstr ""
 
-#: src/prefs.ui:260
+#: src/prefs.ui:267
 msgid "Side Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:306
+#: src/prefs.ui:313
 msgid "Align Window to Center"
 msgstr "Fenster zentrieren"
 
-#: src/prefs.ui:313
+#: src/prefs.ui:320
 msgid "Shortcut to align the window in focus to center without resizing it."
 msgstr "Tastenkürzel um das Fenster mit Focus zu zentrieren ohne die Größe zu ändern."
 
-#: src/prefs.ui:353
+#: src/prefs.ui:360
 msgid "Increase the Gap Size"
 msgstr "Abstand vergrößern"
 
-#: src/prefs.ui:360
+#: src/prefs.ui:367
 msgid "Shortcut to increase the gap size by 5."
 msgstr "Tastenkürzel um den Abstand um 5 zu vergrößern."
 
-#: src/prefs.ui:400
+#: src/prefs.ui:407
 msgid "Decrease the Gap Size"
 msgstr "Abstand verringern"
 
-#: src/prefs.ui:407
+#: src/prefs.ui:414
 msgid "Shortcut to decrease the gap size by 5."
 msgstr "Tastenkürzel um den Abstand um 5 zu verringern."
 
-#: src/prefs.ui:447
+#: src/prefs.ui:454
 msgid "Tile Window to Center"
 msgstr "Fenster zentrieren"
 
-#: src/prefs.ui:454
+#: src/prefs.ui:461
 msgid "Shortcut to tile the window in focus to center."
 msgstr "Tastenkürzel um das Fenster zu zentrieren."
 
-#: src/prefs.ui:494
+#: src/prefs.ui:501
 msgid "Tile Window to Left"
 msgstr "Fenster nach links verschieben"
 
-#: src/prefs.ui:501
+#: src/prefs.ui:508
 msgid "Shortcut to tile the window in focus to left."
 msgstr "Tastenkürzel um das Fenster nach links zu verschieben."
 
-#: src/prefs.ui:541
+#: src/prefs.ui:548
 msgid "Tile Window to Right"
 msgstr "Fenster nach rechts verschieben"
 
-#: src/prefs.ui:548
+#: src/prefs.ui:555
 msgid "Shortcut to tile the window in focus to right."
 msgstr "Tastenkürzel um das Fenster nach rechts zu verschieben."
 
-#: src/prefs.ui:588
+#: src/prefs.ui:595
 msgid "Tile Window to Top"
 msgstr "Fenster nach oben verschieben"
 
-#: src/prefs.ui:595
+#: src/prefs.ui:602
 msgid "Shortcut to tile the window in focus to top."
 msgstr "Tastenkürzel um das Fenster nach oben zu verschieben."
 
-#: src/prefs.ui:635
+#: src/prefs.ui:642
 msgid "Tile Window to Bottom"
 msgstr "Fenster nach unten verschieben"
 
-#: src/prefs.ui:642
+#: src/prefs.ui:649
 msgid "Shortcut to tile the window in focus to bottom."
 msgstr "Tastenkürzel um das Fenster nach unten zu verschieben."
 
-#: src/prefs.ui:682
+#: src/prefs.ui:689
 msgid "Tile Window to Top Left"
 msgstr "Fenster nach links-oben verschieben"
 
-#: src/prefs.ui:689
+#: src/prefs.ui:696
 msgid "Shortcut to tile the window in focus to top left."
 msgstr "Tastenkürzel um das Fenster nach links-oben zu verschieben."
 
-#: src/prefs.ui:729
+#: src/prefs.ui:736
 msgid "Tile Window to Top Right"
 msgstr "Fenster nach rechts-oben verschieben"
 
-#: src/prefs.ui:736
+#: src/prefs.ui:743
 msgid "Shortcut to tile the window in focus to top right."
 msgstr "Tastenkürzel um das Fenster nach rechts-oben zu verschieben."
 
-#: src/prefs.ui:776
+#: src/prefs.ui:783
 msgid "Tile Window to Bottom Left"
 msgstr "Fenster nach links-unten verschieben"
 
-#: src/prefs.ui:783
+#: src/prefs.ui:790
 msgid "Shortcut to tile the window in focus to bottom left."
 msgstr "Tastenkürzel um das Fenster nach links-unten zu verschieben."
 
-#: src/prefs.ui:823
+#: src/prefs.ui:830
 msgid "Tile Window to Bottom Right"
 msgstr "Fenster nach rechts-unten verschieben"
 
-#: src/prefs.ui:830
+#: src/prefs.ui:837
 msgid "Shortcut to tile the window in focus to bottom right."
 msgstr "Tastenkürzel um das FEnster nach rechts-unten zu verschieben."
 

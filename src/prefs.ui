@@ -121,6 +121,58 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
+                            <property name="label" translatable="yes">Keybinding iterate timeout</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="valign">center</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds.</property>
+                            <property name="use-markup">1</property>
+                            <property name="wrap">1</property>
+                            <property name="max-width-chars">50</property>
+                            <property name="xalign">0</property>
+                            <style>
+                              <class name="dim-label" />
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="next_step_timeout">
+                        <property name="hexpand">1</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="adjustment">
+                          <object class="GtkAdjustment">
+                            <property name="lower">100</property>
+                            <property name="upper">10000</property>
+                            <property name="step-increment">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow">
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="margin-start">16</property>
+                    <property name="margin-end">16</property>
+                    <property name="margin-top">16</property>
+                    <property name="margin-bottom">16</property>
+                    <property name="spacing">30</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">Gaps Between Windows</property>
                           </object>
                         </child>
@@ -143,51 +195,6 @@
                     <child>
                       <object class="GtkSwitch" id="gaps_between_windows">
                         <property name="hexpand">1</property>
-                        <property name="halign">end</property>
-                        <property name="valign">center</property>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBoxRow">
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="margin-start">16</property>
-                    <property name="margin-end">16</property>
-                    <property name="margin-top">16</property>
-                    <property name="margin-bottom">16</property>
-                    <property name="spacing">30</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Keybinding iterate timeout</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="valign">center</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds.</property>
-                            <property name="use-markup">1</property>
-                            <property name="wrap">1</property>
-                            <property name="max-width-chars">50</property>
-                            <property name="xalign">0</property>
-                            <style>
-                              <class name="dim-label" />
-                            </style>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSwitch" id="next_step_timeout">
-                        <property name="hexpand">2000</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
                       </object>
