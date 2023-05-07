@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 04:02+0900\n"
+"POT-Creation-Date: 2023-05-08 05:15+0900\n"
 "PO-Revision-Date: 2021-12-31 11:30+0200\n"
 "Last-Translator: Marco Pometti <marco.pometti93@gmail.com>\n"
 "Language-Team: Italian\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=0;\n"
 
-#: src/prefs.js:137
+#: src/prefs.js:145
 msgid "Disabled"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr "Scorciatoia da Tastiera"
 
-#: src/extension.js:174
+#: src/extension.js:183
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"

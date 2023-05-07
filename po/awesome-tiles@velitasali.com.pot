@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 04:02+0900\n"
+"POT-Creation-Date: 2023-05-08 05:15+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/prefs.js:137
+#: src/prefs.js:145
 msgid "Disabled"
 msgstr ""
 
@@ -180,7 +180,7 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr ""
 
-#: src/extension.js:174
+#: src/extension.js:183
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"

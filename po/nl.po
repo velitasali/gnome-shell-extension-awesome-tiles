@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 04:02+0900\n"
+"POT-Creation-Date: 2023-05-08 05:15+0900\n"
 "PO-Revision-Date: 2022-03-04 18:18+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: src/prefs.js:137
+#: src/prefs.js:145
 msgid "Disabled"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: src/extension.js:174
+#: src/extension.js:183
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"
