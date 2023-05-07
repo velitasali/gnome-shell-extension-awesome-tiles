@@ -240,8 +240,15 @@ class Extension {
   }
 
   // give time to redraw it selfs to application
-  _delayFrames() {
-    return new Promise(r=>GLib.timeout_add(GLib.PRIORITY_LOW,60,r))
+  _delayFrames(actor) {
+    return new Promise(resolve=>{
+      const timeline = new Clutter.Timeline({ actor:actor,duration: 1 })
+      timeline.connect("new-frame",()=>{
+        timeline.run_dispose()
+        resolve()
+      })
+      timeline.start()
+    })
   }
 
   async _setWindowRect(window, x, y, width, height, animate) {
@@ -281,7 +288,7 @@ class Extension {
     // draw clone, and wait for real window finish drawn
     global.window_group.insert_child_above(clone,actor)
     actor.visible = false
-    await this._delayFrames()
+    await this._delayFrames(actor)
     if (this._windowAnimations[window] != clone) {
       clone.destroy()
       return
