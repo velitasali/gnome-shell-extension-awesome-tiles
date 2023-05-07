@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 18:34+0900\n"
+"POT-Creation-Date: 2023-05-08 02:43+0900\n"
 "PO-Revision-Date: 2022-03-04 18:18+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: src/prefs.js:129
+#: src/prefs.js:137
 msgid "Disabled"
 msgstr ""
 
@@ -47,110 +47,118 @@ msgid "Put gaps between windows."
 msgstr ""
 
 #: src/prefs.ui:169
+msgid "Keybinding iterate timeout"
+msgstr ""
+
+#: src/prefs.ui:176
+msgid "Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds."
+msgstr ""
+
+#: src/prefs.ui:214
 msgid "Center Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:176 src/prefs.ui:222
+#: src/prefs.ui:221 src/prefs.ui:267
 msgid "Steps on each key press (values between 0-1)."
 msgstr ""
 
-#: src/prefs.ui:215
+#: src/prefs.ui:260
 msgid "Side Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:261
+#: src/prefs.ui:306
 msgid "Align Window to Center"
 msgstr "Venster centreren"
 
-#: src/prefs.ui:268
+#: src/prefs.ui:313
 msgid "Shortcut to align the window in focus to center without resizing it."
 msgstr "De sneltoets waarmee een gefocust venster kan worden gecentreerd."
 
-#: src/prefs.ui:308
+#: src/prefs.ui:353
 msgid "Increase the Gap Size"
 msgstr "Tussenruimte vergroten"
 
-#: src/prefs.ui:315
+#: src/prefs.ui:360
 msgid "Shortcut to increase the gap size by 5."
 msgstr "De sneltoets waarmee de tussenruimte met 5% kan worden vergroot."
 
-#: src/prefs.ui:355
+#: src/prefs.ui:400
 msgid "Decrease the Gap Size"
 msgstr "Tussenruimte verkleinen"
 
-#: src/prefs.ui:362
+#: src/prefs.ui:407
 msgid "Shortcut to decrease the gap size by 5."
 msgstr "De sneltoets waarmee de tussenruimte met 5% kan worden verkleind."
 
-#: src/prefs.ui:402
+#: src/prefs.ui:447
 msgid "Tile Window to Center"
 msgstr "Venster centreren en tegelen"
 
-#: src/prefs.ui:409
+#: src/prefs.ui:454
 msgid "Shortcut to tile the window in focus to center."
 msgstr "De sneltoets waarmee een gefocust venster kan worden gecentreerd en getegeld."
 
-#: src/prefs.ui:449
+#: src/prefs.ui:494
 msgid "Tile Window to Left"
 msgstr "Venster tegelen aan linkerkant"
 
-#: src/prefs.ui:456
+#: src/prefs.ui:501
 msgid "Shortcut to tile the window in focus to left."
 msgstr "De sneltoets waarmee een gefocust venster aan de linkerkant van het scherm kan worden getegeld."
 
-#: src/prefs.ui:496
+#: src/prefs.ui:541
 msgid "Tile Window to Right"
 msgstr "Venster tegelen aan rechterkant"
 
-#: src/prefs.ui:503
+#: src/prefs.ui:548
 msgid "Shortcut to tile the window in focus to right."
 msgstr "De sneltoets waarmee een gefocust venster aan de rechterkant van het scherm kan worden getegeld."
 
-#: src/prefs.ui:543
+#: src/prefs.ui:588
 msgid "Tile Window to Top"
 msgstr "Venster bovenaan tegelen"
 
-#: src/prefs.ui:550
+#: src/prefs.ui:595
 msgid "Shortcut to tile the window in focus to top."
 msgstr "De sneltoets waarmee een gefocust venster bovenaan het scherm kan worden getegeld."
 
-#: src/prefs.ui:590
+#: src/prefs.ui:635
 msgid "Tile Window to Bottom"
 msgstr "Venster onderaan tegelen"
 
-#: src/prefs.ui:597
+#: src/prefs.ui:642
 msgid "Shortcut to tile the window in focus to bottom."
 msgstr "De sneltoets waarmee een gefocust venster onderaan het scherm kan worden getegeld."
 
-#: src/prefs.ui:637
+#: src/prefs.ui:682
 msgid "Tile Window to Top Left"
 msgstr "Venster linksboven tegelen"
 
-#: src/prefs.ui:644
+#: src/prefs.ui:689
 msgid "Shortcut to tile the window in focus to top left."
 msgstr "De sneltoets waarmee een gefocust venster linksboven op het scherm kan worden getegeld."
 
-#: src/prefs.ui:684
+#: src/prefs.ui:729
 msgid "Tile Window to Top Right"
 msgstr "Venster rechtsboven tegelen"
 
-#: src/prefs.ui:691
+#: src/prefs.ui:736
 msgid "Shortcut to tile the window in focus to top right."
 msgstr "De sneltoets waarmee een gefocust venster rechtsboven op het scherm kan worden getegeld."
 
-#: src/prefs.ui:731
+#: src/prefs.ui:776
 msgid "Tile Window to Bottom Left"
 msgstr "Venster linksonder tegelen"
 
-#: src/prefs.ui:738
+#: src/prefs.ui:783
 msgid "Shortcut to tile the window in focus to bottom left."
 msgstr "De sneltoets waarmee een gefocust venster linksonder op het scherm kan worden getegeld."
 
-#: src/prefs.ui:778
+#: src/prefs.ui:823
 msgid "Tile Window to Bottom Right"
 msgstr "Venster rechtsonder tegelen"
 
-#: src/prefs.ui:785
+#: src/prefs.ui:830
 msgid "Shortcut to tile the window in focus to bottom right."
 msgstr "De sneltoets waarmee een gefocust venster rechtsonder op het scherm kan worden getegeld."
 
@@ -162,7 +170,7 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: src/extension.js:168
+#: src/extension.js:170
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"

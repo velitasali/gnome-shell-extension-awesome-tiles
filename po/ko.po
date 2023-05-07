@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 18:34+0900\n"
+"POT-Creation-Date: 2023-05-08 02:43+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/prefs.js:129
+#: src/prefs.js:137
 msgid "Disabled"
 msgstr "비활성화됨"
 
@@ -37,7 +37,7 @@ msgstr "윈도우와 작업 공간 사이의 여백"
 
 #: src/prefs.ui:86
 msgid "Percentage to leave out as gap when the window in focus is tiled."
-msgstr "선택된 창을 타일링 할 때 남겨둘 여백을 퍼센트로 지정합니다"
+msgstr "선택된 창을 분할할 때 남겨둘 여백을 퍼센트로 지정합니다"
 
 #: src/prefs.ui:124
 msgid "Gaps Between Windows"
@@ -48,110 +48,118 @@ msgid "Put gaps between windows."
 msgstr "윈도우들 사이에 여백을 추가합니다"
 
 #: src/prefs.ui:169
-msgid "Center Tiling Steps"
-msgstr "중간으로 타일링시 단계"
+msgid "Keybinding iterate timeout"
+msgstr "키바인딩 반복 타임아웃"
 
-#: src/prefs.ui:176 src/prefs.ui:222
+#: src/prefs.ui:176
+msgid "Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds."
+msgstr "키바인당 반복으로 분할 단계를 조정할 수 있는 최대 시간을 지정합니다."
+
+#: src/prefs.ui:214
+msgid "Center Tiling Steps"
+msgstr "중간으로 분할 단계"
+
+#: src/prefs.ui:221 src/prefs.ui:267
 msgid "Steps on each key press (values between 0-1)."
 msgstr "키를 누를 때 마다의 단계 (0 에서 1 사이의 값)"
 
-#: src/prefs.ui:215
+#: src/prefs.ui:260
 msgid "Side Tiling Steps"
-msgstr "좌우 타일링시 단계"
+msgstr "좌우 분할 단계"
 
-#: src/prefs.ui:261
+#: src/prefs.ui:306
 msgid "Align Window to Center"
 msgstr "중간에 창 맞추기"
 
-#: src/prefs.ui:268
+#: src/prefs.ui:313
 msgid "Shortcut to align the window in focus to center without resizing it."
 msgstr "중간으로 창을 맞추는 단축키를 지정합니다"
 
-#: src/prefs.ui:308
+#: src/prefs.ui:353
 msgid "Increase the Gap Size"
 msgstr "여백 크기 증가시키기"
 
-#: src/prefs.ui:315
+#: src/prefs.ui:360
 msgid "Shortcut to increase the gap size by 5."
 msgstr "여백 크기를 5 만큼 증가시키는 단축키를 지정합니다"
 
-#: src/prefs.ui:355
+#: src/prefs.ui:400
 msgid "Decrease the Gap Size"
 msgstr "여백 크기 감소시키기"
 
-#: src/prefs.ui:362
+#: src/prefs.ui:407
 msgid "Shortcut to decrease the gap size by 5."
 msgstr "여백 크기를 5 만큼 감소시키는 단축키를 지정합니다"
 
-#: src/prefs.ui:402
+#: src/prefs.ui:447
 msgid "Tile Window to Center"
 msgstr "중간으로 창을 분할하기"
 
-#: src/prefs.ui:409
+#: src/prefs.ui:454
 msgid "Shortcut to tile the window in focus to center."
 msgstr "중간으로 창을 분할하기"
 
-#: src/prefs.ui:449
+#: src/prefs.ui:494
 msgid "Tile Window to Left"
 msgstr "왼쪽으로 창을 분할하기"
 
-#: src/prefs.ui:456
+#: src/prefs.ui:501
 msgid "Shortcut to tile the window in focus to left."
 msgstr "왼쪽으로 창을 분할하는 단축키를 지정합니다"
 
-#: src/prefs.ui:496
+#: src/prefs.ui:541
 msgid "Tile Window to Right"
 msgstr "오른쪽으로 창을 분할하기"
 
-#: src/prefs.ui:503
+#: src/prefs.ui:548
 msgid "Shortcut to tile the window in focus to right."
 msgstr "오른쪽으로 창을 분할하는 단축키를 지정합니다"
 
-#: src/prefs.ui:543
+#: src/prefs.ui:588
 msgid "Tile Window to Top"
 msgstr "위쪽으로 창을 분할하기"
 
-#: src/prefs.ui:550
+#: src/prefs.ui:595
 msgid "Shortcut to tile the window in focus to top."
 msgstr "위쪽으로 창을 분할하는 단축키를 지정합니다"
 
-#: src/prefs.ui:590
+#: src/prefs.ui:635
 msgid "Tile Window to Bottom"
 msgstr "아래쪽으로 창을 분할하기"
 
-#: src/prefs.ui:597
+#: src/prefs.ui:642
 msgid "Shortcut to tile the window in focus to bottom."
 msgstr "아래쪽으로 창을 분할하는 단축키를 지정합니다."
 
-#: src/prefs.ui:637
+#: src/prefs.ui:682
 msgid "Tile Window to Top Left"
 msgstr "왼쪽 위로 창을 분할하기"
 
-#: src/prefs.ui:644
+#: src/prefs.ui:689
 msgid "Shortcut to tile the window in focus to top left."
 msgstr "왼쪽 위로 창을 분할하는 단축키를 지정합니다."
 
-#: src/prefs.ui:684
+#: src/prefs.ui:729
 msgid "Tile Window to Top Right"
 msgstr "오른쪽 위로 창을 분할하기"
 
-#: src/prefs.ui:691
+#: src/prefs.ui:736
 msgid "Shortcut to tile the window in focus to top right."
 msgstr "오른쪽 위로 창을 분할하는 단축키를 지정합니다"
 
-#: src/prefs.ui:731
+#: src/prefs.ui:776
 msgid "Tile Window to Bottom Left"
 msgstr "왼쪽 아래로 창을 분할하기"
 
-#: src/prefs.ui:738
+#: src/prefs.ui:783
 msgid "Shortcut to tile the window in focus to bottom left."
 msgstr "왼쪽 아래로 창을 분할하는 단축키를 지정합니다"
 
-#: src/prefs.ui:778
+#: src/prefs.ui:823
 msgid "Tile Window to Bottom Right"
 msgstr "오른쪽 아래로 창을 분할하기"
 
-#: src/prefs.ui:785
+#: src/prefs.ui:830
 msgid "Shortcut to tile the window in focus to bottom right."
 msgstr "오른쪽 아래로 창을 분할하는 단축키를 지정합니다"
 
@@ -163,9 +171,9 @@ msgstr "새 단축키를 할당하거나 'Backspace' 키를 눌러 비활성화�
 msgid "Keyboard Shortcut"
 msgstr "키보드 단축키"
 
-#: src/extension.js:168
+#: src/extension.js:170
 #, javascript-format
-msgid "여백 크기가 이제 %d 퍼센트입니다"
-msgid_plural "여백 크기가 이제 %d 퍼센트입니다"
+msgid "Gap size is now at %d percent"
+msgid_plural "Gap size is now at %d percent"
 msgstr[0] ""
 msgstr[1] ""

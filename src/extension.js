@@ -196,6 +196,10 @@ class Extension {
     return this._settings.get_boolean("enable-window-animation")
   }
 
+  get _nextStepTimeout() {
+    return this._settings.get_int("next-step-timeout")
+  }
+
   _captureWindow(window_actor,rect) {
     return new Clutter.Actor({
       height: rect.height,
@@ -336,7 +340,7 @@ class Extension {
     const successive =
       prev &&
       prev.windowId === windowId &&
-      time - prev.time <= TILING_SUCCESSIVE_TIMEOUT &&
+      time - prev.time <= this._nextStepTimeout &&
       prev.top === top &&
       prev.bottom === bottom &&
       prev.left === left &&
