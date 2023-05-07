@@ -267,11 +267,9 @@ class Extension {
     // set clone position and scale
     clone.scale_y = cloneGoalScaleY
     clone.scale_x = cloneGoalScaleX
-    log("QE: "+(decoLeftAfter - decoLeftBefore*cloneGoalScaleX))
     clone.x = decoLeftAfter - decoLeftBefore*cloneGoalScaleX
     clone.y = decoTopAfter - decoTopBefore*cloneGoalScaleY
     actor.add_actor(clone)
-    // clone
 
     // Create animations
     clone.ease_property('opacity', 0, {
