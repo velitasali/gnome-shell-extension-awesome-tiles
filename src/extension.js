@@ -65,7 +65,7 @@ class Extension {
     this._settings = null
     _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
     _shortcutsBindingIds.length = 0
-    Object.values(this._windowAnimations).forEach(item=>item.destroy())
+    Object.values(this._windowAnimations).forEach(item=>item?.destroy())
     this._windowAnimations = null
   }
 
