@@ -194,30 +194,25 @@ class Extension {
     return this._settings.get_boolean("enable-window-animation")
   }
 
-  _actorFromWindow(window) {
-    return global.get_window_actors().find(actor=>actor.meta_window == window)
-  }
-
   _captureWindow(window_actor,rect) {
     return new Clutter.Actor({
-      x: window_actor.x + (rect ? rect.x - window_actor.x : 0),
-      y: window_actor.y + (rect ? rect.y - window_actor.y : 0),
-      height: rect?.height || window_actor.height,
-      width: rect?.width || window_actor.width,
-      content: window_actor.paint_to_content(rect || null)
+      height: rect.height,
+      width: rect.width,
+      content: window_actor.paint_to_content(null)
     })
   }
 
-  _setWindowRect(window, x, y, width, height, animate) {
+  async _setWindowRect(window, x, y, width, height, animate) {
     const innerRectBefore = window.get_frame_rect()
-    const actor = this._actorFromWindow(window)
+    const outterRectBefore = window.get_buffer_rect()
+    const actor = window.get_compositor_private()
     const isMaximized = window.get_maximized()
     let clone
 
     // unmaximize
     if (isMaximized) {
       // Capture window before unmaximize
-      if (animate) clone = this._captureWindow(actor)
+      if (animate) clone = this._captureWindow(actor,outterRectBefore)
       
       // unmaximize
       window.unmaximize(Meta.MaximizeFlags.BOTH)
@@ -225,18 +220,19 @@ class Extension {
 
     // reset all animations (last ani / unmaximize ani)
     if (isMaximized || this._windowAnimations[window]) {
-      for (const prop of [
+      this._windowAnimations[window]?.destroy()
+      await Promise.all([
         ['scale_x', 1],
         ['scale_y', 1],
-        ['x', innerRectBefore.x],
-        ['y', innerRectBefore.y]
-      ]) {
+        ['x', outterRectBefore.x],
+        ['y', outterRectBefore.y]
+      ].map(prop=>new Promise(resolve=>
         actor.ease_property(prop[0],prop[1],{
           duration: 0,
+          onComplete: resolve
         })
-      }
+      )))
     }
-    this._windowAnimations[window]?.destroy()
 
     // no animation
     if (!animate) {
@@ -244,29 +240,38 @@ class Extension {
       return
     }
 
-    // Calculate size / position
+    // Calculate before size / position
     const cloneGoalScaleX = width/innerRectBefore.width
     const cloneGoalScaleY = height/innerRectBefore.height
     const actorInitScaleX = innerRectBefore.width/width
     const actorInitScaleY = innerRectBefore.height/height
-    const decoLeftBefore  = (innerRectBefore.x-actor.x)
-    const decoTopBefore   = (innerRectBefore.y-actor.y)
+    const decoLeftBefore  = (innerRectBefore.x-outterRectBefore.x)
+    const decoTopBefore   = (innerRectBefore.y-outterRectBefore.y)
     
     // Create clone and resize real window
-    this._windowAnimations[window] = clone ??= this._captureWindow(actor)
-    global.window_group.insert_child_above(clone,actor)
+    this._windowAnimations[window] = clone ??= this._captureWindow(actor,outterRectBefore)
     window.move_resize_frame(false, x, y, width, height)
 
-    // Recalculate size / position (required for real window)
+    // Recalculate after size / position (required for real window)
     const innerRectAfter = window.get_frame_rect()
-    const decoLeftAfter  = (innerRectAfter.x-actor.x)
-    const decoTopAfter   = (innerRectAfter.y-actor.y)
+    const outterRectAfter = window.get_buffer_rect()
+    const decoLeftAfter  = (innerRectAfter.x-outterRectAfter.x)
+    const decoTopAfter   = (innerRectAfter.y-outterRectAfter.y)
 
     // Set real window actor position
     actor.scale_x = actorInitScaleX
     actor.scale_y = actorInitScaleY
-    actor.x = innerRectBefore.x - decoLeftBefore*actorInitScaleX
-    actor.y = innerRectBefore.y - decoTopBefore*actorInitScaleY
+    actor.x = innerRectBefore.x - decoLeftAfter*actorInitScaleX
+    actor.y = innerRectBefore.y - decoTopAfter*actorInitScaleY
+
+    // set clone position and scale
+    clone.scale_y = cloneGoalScaleY
+    clone.scale_x = cloneGoalScaleX
+    log("QE: "+(decoLeftAfter - decoLeftBefore*cloneGoalScaleX))
+    clone.x = decoLeftAfter - decoLeftBefore*cloneGoalScaleX
+    clone.y = decoTopAfter - decoTopBefore*cloneGoalScaleY
+    actor.add_actor(clone)
+    // clone
 
     // Create animations
     clone.ease_property('opacity', 0, {
@@ -283,11 +288,7 @@ class Extension {
       [actor, 'scale_x', 1],
       [actor, 'scale_y', 1],
       [actor, 'x', x - decoLeftAfter],
-      [actor, 'y', y - decoTopAfter],
-      [clone, 'x', x - decoLeftBefore*cloneGoalScaleX],
-      [clone, 'y', y - decoTopBefore*cloneGoalScaleY],
-      [clone, 'scale_y', cloneGoalScaleY],
-      [clone, 'scale_x', cloneGoalScaleX]
+      [actor, 'y', y - decoTopAfter]
     ]) {
       prop[0].ease_property(prop[1],prop[2],{
         duration: 340,
