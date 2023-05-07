@@ -245,15 +245,14 @@ class Extension {
 
   // give time to redraw it selfs to application
   _delayFrames(actor) {
-    // return new Promise(resolve=>{
-    //   const timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
-    //   timeline.connect("new-frame",()=>{
-    //     timeline.run_dispose()
-    //     resolve()
-    //   })
-    //   timeline.start()
-    // })
-    return new Promise(r=>GLib.timeout_add(GLib.PRIORITY_LOW,60,r))
+    return new Promise(resolve=>{
+      const timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
+      timeline.connect("new-frame",()=>{
+        timeline.run_dispose()
+        resolve()
+      })
+      timeline.start()
+    })
   }
 
   async _setWindowRect(window, x, y, width, height, animate) {
