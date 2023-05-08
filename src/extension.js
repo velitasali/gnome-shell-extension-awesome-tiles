@@ -257,7 +257,9 @@ class Extension {
   _delayFrames(actor) {
     return new Promise(resolve=>{
       const timeline = actor.timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
+      let count = 0
       timeline.connect("new-frame",()=>{
+        if (++count<=5) return
         timeline.run_dispose()
         actor.timeline = null
         resolve()
