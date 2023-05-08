@@ -18,6 +18,7 @@ function pack-extension {
     --extra-source="prefs.ui" \
     --extra-source="prefs-shortcut-dialog.ui" \
     --extra-source="utils.js" \
+    --extra-source="windowMover.js" \
     --extra-source="../LICENSE"
 }
 

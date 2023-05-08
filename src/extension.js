@@ -20,7 +20,7 @@
 const ExtensionUtils = imports.misc.extensionUtils
 const Gettext = imports.gettext
 const Main = imports.ui.main
-const { Meta, Shell, Clutter, GLib, Gio } = imports.gi
+const { Meta, Shell, Gio } = imports.gi
 
 const Me = ExtensionUtils.getCurrentExtension()
 const {
@@ -31,11 +31,10 @@ const {
   TILING_SUCCESSIVE_TIMEOUT,
 } = Me.imports.constants
 const { parseTilingSteps } = Me.imports.utils
+const { WindowMover } = Me.imports.windowMover
 
 const Domain = Gettext.domain(Me.metadata.uuid)
 const { ngettext } = Domain
-
-const _shortcutsBindingIds = []
 
 function init() {
   ExtensionUtils.initTranslations(Me.metadata.uuid)
@@ -44,9 +43,10 @@ function init() {
 
 class Extension {
   enable() {
+    this._windowMover = new WindowMover()
     this._settings = ExtensionUtils.getSettings()
-    this._windowAnimations = []
     this._osdGapChangedIcon = Gio.icon_new_for_string("view-grid-symbolic")
+    this._shortcutsBindingIds = []
 
     this._bindShortcut("shortcut-align-window-to-center", this._alignWindowToCenter.bind(this))
     this._bindShortcut("shortcut-tile-window-to-center", this._tileWindowCenter.bind(this))
@@ -63,20 +63,10 @@ class Extension {
   }
 
   disable() {
+    this._windowMover.destroy()
     this._osdGapChangedIcon.run_dispose()
-    this._osdGapChangedIcon = null
-    this._settings = null
-    _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
-    _shortcutsBindingIds.length = 0
-    this._windowAnimations.forEach(animation=>{
-      animation.clone?.destroy()
-      const actor = animation.actor
-      if (actor) {
-        actor.timeline?.run_dispose()
-        actor.timeline = null
-      }
-    })
-    this._windowAnimations = null
+    this._shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
+    this._shortcutsBindingIds = this._settings = this._windowMover = this._osdGapChangedIcon = null
   }
 
   _alignWindowToCenter() {
@@ -110,7 +100,7 @@ class Extension {
       callback
     )
 
-    _shortcutsBindingIds.push(name)
+    this._shortcutsBindingIds.push(name)
   }
 
   _calculateWorkspaceArea(window) {
@@ -214,150 +204,6 @@ class Extension {
     return this._settings.get_int("next-step-timeout")
   }
 
-  _captureWindow(window_actor,rect) {
-    return new Clutter.Actor({
-      height: rect.height,
-      width: rect.width,
-      x: rect.x,
-      y: rect.y,
-      content: window_actor.paint_to_content(null)
-    })
-  }
-
-  // unmaximize without animation by hacking gsettings
-  _unmaximizeWithoutAnimation(window,rect) {
-    rect ??= window.get_frame_rect()
-    const desktopSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' })
-    const lastValue = desktopSettings.get_boolean("enable-animations")
-    if (lastValue) desktopSettings.set_boolean("enable-animations",false)
-    window.unmaximize(Meta.MaximizeFlags.BOTH)
-    window.move_resize_frame(false, rect.x, rect.y, rect.width, rect.height)
-    if (lastValue) desktopSettings.set_boolean("enable-animations",true)
-  }
-
-  // remove window actor's last animation (unmaximize / last ani)
-  _removeWindowActorAnimation(window_actor) {
-    return Promise.all([
-      ['scale_x', 1],
-      ['scale_y', 1],
-      ['x', window_actor.x],
-      ['y', window_actor.y]
-    ].map(prop=>
-        new Promise(resolve=>
-          window_actor.ease_property(prop[0],prop[1],{
-            duration: 1,
-            onComplete: resolve
-          })
-        )
-      )
-    )
-  }
-
-  // give time to redraw it selfs to application
-  _delayFrames(actor) {
-    return new Promise(resolve=>{
-      const timeline = actor.timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
-      let count = 0
-      timeline.connect("new-frame",()=>{
-        if (++count<=5) return
-        timeline.run_dispose()
-        actor.timeline = null
-        resolve()
-      })
-      timeline.start()
-    })
-  }
-
-  async _setWindowRect(window, x, y, width, height, animate) {
-    const innerRectBefore = window.get_frame_rect()
-    const outterRectBefore = window.get_buffer_rect()
-    const actor = window.get_compositor_private()
-    const isMaximized = window.get_maximized()
-    const lastAnimation = this._windowAnimations.find(item=>item.window === window)
-    const thisAnimation = lastAnimation || {}
-    let clone
-
-    // unmaximize
-    if (isMaximized) {
-      clone = animate && this._captureWindow(actor,outterRectBefore)
-      this._unmaximizeWithoutAnimation(window,innerRectBefore)
-    }
-
-    // reset all animations (last ani / unmaximize ani)
-    if (animate && (isMaximized || lastAnimation)) {
-      lastAnimation?.clone?.destroy()
-      await this._removeWindowActorAnimation(actor)
-    }
-
-    // clone window, and resize meta window
-    thisAnimation.clone = animate && (clone ??= this._captureWindow(actor,outterRectBefore))
-    thisAnimation.window = window
-    thisAnimation.actor = actor
-    window.move_resize_frame(false, x, y, width, height)
-    if (!animate) {
-      return
-    }
-    if (!lastAnimation) this._windowAnimations.push(thisAnimation)
-
-    // Calculate before size / position
-    const cloneGoalScaleX = width/innerRectBefore.width
-    const cloneGoalScaleY = height/innerRectBefore.height
-    const actorInitScaleX = innerRectBefore.width/width
-    const actorInitScaleY = innerRectBefore.height/height
-    const decoLeftBefore  = (innerRectBefore.x-outterRectBefore.x)
-    const decoTopBefore   = (innerRectBefore.y-outterRectBefore.y)
-
-    // draw clone, and wait for real window finish drawn
-    global.window_group.insert_child_above(clone,actor)
-    actor.visible = false
-    await this._delayFrames(actor)
-    if (this._windowAnimations.find(item=>item.window === window).clone != clone) {
-      clone.destroy()
-      return
-    }
-    actor.visible = true
-
-    // Recalculate after size / position (required for real window)
-    const innerRectAfter = window.get_frame_rect()
-    const outterRectAfter = window.get_buffer_rect()
-    const decoLeftAfter  = (innerRectAfter.x-outterRectAfter.x)
-    const decoTopAfter   = (innerRectAfter.y-outterRectAfter.y)
-
-    // Set real window actor position
-    actor.scale_x = actorInitScaleX
-    actor.scale_y = actorInitScaleY
-    actor.x = innerRectBefore.x - decoLeftAfter*actorInitScaleX
-    actor.y = innerRectBefore.y - decoTopAfter*actorInitScaleY
-
-    // Create animations
-    clone.ease_property('opacity', 0, {
-      duration: 300,
-      mode: Clutter.AnimationMode.EASE_OUT_QUART,
-      onComplete: async()=>{
-        const nowAnimation = this._windowAnimations.find(item=>item.window === window)
-        if (nowAnimation && nowAnimation.clone === clone) {
-          nowAnimation?.clone?.destroy()
-          this._windowAnimations.splice(this._windowAnimations.indexOf(nowAnimation),1)
-        }
-      }
-    })
-    for (const prop of [
-      [actor, 'scale_x', 1],
-      [actor, 'scale_y', 1],
-      [actor, 'x', x-decoLeftAfter],
-      [actor, 'y', y-decoTopAfter],
-      [clone,'scale_x',cloneGoalScaleX],
-      [clone,'scale_y',cloneGoalScaleY],
-      [clone,'x',x-decoLeftBefore*cloneGoalScaleX],
-      [clone,'y',y-decoTopBefore*cloneGoalScaleY]
-    ]) {
-      prop[0].ease_property(prop[1],prop[2],{
-        duration: 300,
-        mode: Clutter.AnimationMode.EASE_OUT_EXPO
-      })
-    }
-  }
-
   _tileWindow(top, bottom, left, right) {
     const window = global.display.get_focus_window()
     if (!window) return
@@ -381,7 +227,6 @@ class Extension {
 
     const workArea = this._calculateWorkspaceArea(window)
     let { x, y, width, height } = workArea
-
 
     // Special case - when tiling to the center we want the largest size to
     // cover the whole available space
@@ -419,7 +264,7 @@ class Extension {
     y = Math.round(y)
     width = Math.round(width)
     height = Math.round(height)
-    this._setWindowRect(window, x, y, width, height, this._isWindowAnimationEnabled)
+    this._windowMover._setWindowRect(window, x, y, width, height, this._isWindowAnimationEnabled)
 
     this._previousTilingOperation =
       { windowId, top, bottom, left, right, time, iteration: iteration + 1 }
