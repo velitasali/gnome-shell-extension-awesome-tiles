@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 18:34+0900\n"
+"POT-Creation-Date: 2023-05-08 05:15+0900\n"
 "PO-Revision-Date: 2021-12-24 19:38+0300\n"
 "Last-Translator: Veli Tasalı <me@velitasali.com>\n"
 "Language-Team: Turkish <contact@monora.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=0\n"
 "X-Generator: Gtranslator 40.0\n"
 
-#: src/prefs.js:129
+#: src/prefs.js:145
 msgid "Disabled"
 msgstr ""
 
@@ -40,118 +40,134 @@ msgid "Percentage to leave out as gap when the window in focus is tiled."
 msgstr "Pencere döşendiğinde boşluk olarak bırakılacak oran."
 
 #: src/prefs.ui:124
-msgid "Gaps Between Windows"
+msgid "Keybinding iterate timeout"
 msgstr ""
 
 #: src/prefs.ui:131
+msgid "Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds."
+msgstr ""
+
+#: src/prefs.ui:176
+msgid "Gap Size Increments"
+msgstr ""
+
+#: src/prefs.ui:183
+msgid "Determine how much gap size adjust by keybinding."
+msgstr ""
+
+#: src/prefs.ui:228
+msgid "Gaps Between Windows"
+msgstr ""
+
+#: src/prefs.ui:235
 msgid "Put gaps between windows."
 msgstr ""
 
-#: src/prefs.ui:169
+#: src/prefs.ui:273
 msgid "Center Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:176 src/prefs.ui:222
+#: src/prefs.ui:280 src/prefs.ui:326
 msgid "Steps on each key press (values between 0-1)."
 msgstr ""
 
-#: src/prefs.ui:215
+#: src/prefs.ui:319
 msgid "Side Tiling Steps"
 msgstr ""
 
-#: src/prefs.ui:261
+#: src/prefs.ui:365
 msgid "Align Window to Center"
 msgstr "Pencereyi Ortaya Hizala"
 
-#: src/prefs.ui:268
+#: src/prefs.ui:372
 msgid "Shortcut to align the window in focus to center without resizing it."
 msgstr "Pencereyi yeniden boyutlandırmadan ortaya hizalayacak kısayol."
 
-#: src/prefs.ui:308
+#: src/prefs.ui:412
 msgid "Increase the Gap Size"
 msgstr "Boşluk Aralığını Arttır"
 
-#: src/prefs.ui:315
-msgid "Shortcut to increase the gap size by 5."
-msgstr "Boşluk aralığını 5 arttıracak kısayol."
+#: src/prefs.ui:419
+msgid "Shortcut to increase the gap size."
+msgstr ""
 
-#: src/prefs.ui:355
+#: src/prefs.ui:459
 msgid "Decrease the Gap Size"
 msgstr "Boşluk Aralığını Azalt"
 
-#: src/prefs.ui:362
-msgid "Shortcut to decrease the gap size by 5."
-msgstr "Boşluk aralığını 5 azaltacak kısayol."
+#: src/prefs.ui:466
+msgid "Shortcut to decrease the gap size."
+msgstr ""
 
-#: src/prefs.ui:402
+#: src/prefs.ui:506
 msgid "Tile Window to Center"
 msgstr "Pencereyi Ortaya Döşe"
 
-#: src/prefs.ui:409
+#: src/prefs.ui:513
 msgid "Shortcut to tile the window in focus to center."
 msgstr "Pencereyi ortaya döşeyecek kısayol."
 
-#: src/prefs.ui:449
+#: src/prefs.ui:553
 msgid "Tile Window to Left"
 msgstr "Pencereyi Sola Döşe"
 
-#: src/prefs.ui:456
+#: src/prefs.ui:560
 msgid "Shortcut to tile the window in focus to left."
 msgstr "Pencereyi sola döşeyecek kısayol."
 
-#: src/prefs.ui:496
+#: src/prefs.ui:600
 msgid "Tile Window to Right"
 msgstr "Pencereyi Sağa Döşe"
 
-#: src/prefs.ui:503
+#: src/prefs.ui:607
 msgid "Shortcut to tile the window in focus to right."
 msgstr "Pencereyi sağa döşeyecek kısayol."
 
-#: src/prefs.ui:543
+#: src/prefs.ui:647
 msgid "Tile Window to Top"
 msgstr "Pencereyi Yukarı Döşe"
 
-#: src/prefs.ui:550
+#: src/prefs.ui:654
 msgid "Shortcut to tile the window in focus to top."
 msgstr "Pencereyi yukarı döşeyecek kısayol."
 
-#: src/prefs.ui:590
+#: src/prefs.ui:694
 msgid "Tile Window to Bottom"
 msgstr "Pencereyi Aşağı Döşe"
 
-#: src/prefs.ui:597
+#: src/prefs.ui:701
 msgid "Shortcut to tile the window in focus to bottom."
 msgstr "Pencereyi aşağı döşeyecek kısayol."
 
-#: src/prefs.ui:637
+#: src/prefs.ui:741
 msgid "Tile Window to Top Left"
 msgstr "Pencereyi Sol Yukarı Döşe"
 
-#: src/prefs.ui:644
+#: src/prefs.ui:748
 msgid "Shortcut to tile the window in focus to top left."
 msgstr "Pencereyi sol yukarı döşeyecek kısayol."
 
-#: src/prefs.ui:684
+#: src/prefs.ui:788
 msgid "Tile Window to Top Right"
 msgstr "Pencereyi Sağ Yukarı Döşe"
 
-#: src/prefs.ui:691
+#: src/prefs.ui:795
 msgid "Shortcut to tile the window in focus to top right."
 msgstr "Pencereyi sağ yukarı döşeyecek kısayol."
 
-#: src/prefs.ui:731
+#: src/prefs.ui:835
 msgid "Tile Window to Bottom Left"
 msgstr "Pencereyi Sol Aşağı Döşe"
 
-#: src/prefs.ui:738
+#: src/prefs.ui:842
 msgid "Shortcut to tile the window in focus to bottom left."
 msgstr "Pencereyi sol aşağı döşeyecek kısayol."
 
-#: src/prefs.ui:778
+#: src/prefs.ui:882
 msgid "Tile Window to Bottom Right"
 msgstr "Pencereyi Sağ Aşağı Döşe"
 
-#: src/prefs.ui:785
+#: src/prefs.ui:889
 msgid "Shortcut to tile the window in focus to bottom right."
 msgstr "Pencereyi sağ aşağı döşeyecek kısayol."
 
@@ -163,12 +179,18 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr "Klavye Kısayolu"
 
-#: src/extension.js:168
+#: src/extension.js:183
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"
 msgstr[0] "Boşluk aralığı artık yüzde %d oranında"
 msgstr[1] "Boşluk aralığı artık yüzde %d oranında"
+
+#~ msgid "Shortcut to increase the gap size by 5."
+#~ msgstr "Boşluk aralığını 5 arttıracak kısayol."
+
+#~ msgid "Shortcut to decrease the gap size by 5."
+#~ msgstr "Boşluk aralığını 5 azaltacak kısayol."
 
 #~ msgid "Press your keyboard shortcut..."
 #~ msgstr "Klayve kısayolunuza basın..."

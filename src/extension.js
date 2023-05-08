@@ -45,7 +45,8 @@ function init() {
 class Extension {
   enable() {
     this._settings = ExtensionUtils.getSettings()
-    this._windowAnimations = {}
+    this._windowAnimations = []
+    this._osdGapChangedIcon = Gio.icon_new_for_string("view-grid-symbolic")
 
     this._bindShortcut("shortcut-align-window-to-center", this._alignWindowToCenter.bind(this))
     this._bindShortcut("shortcut-tile-window-to-center", this._tileWindowCenter.bind(this))
@@ -62,10 +63,19 @@ class Extension {
   }
 
   disable() {
+    this._osdGapChangedIcon.run_dispose()
+    this._osdGapChangedIcon = null
     this._settings = null
     _shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
     _shortcutsBindingIds.length = 0
-    Object.values(this._windowAnimations).forEach(item=>item.destroy())
+    this._windowAnimations.forEach(animation=>{
+      animation.clone?.destroy()
+      const actor = animation.actor
+      if (actor) {
+        actor.timeline?.run_dispose()
+        actor.timeline = null
+      }
+    })
     this._windowAnimations = null
   }
 
@@ -144,13 +154,17 @@ class Extension {
     }
   }
 
+  get _gapSizeIncrements() {
+    return this._settings.get_int("gap-size-increments")
+  }
+
   _decreaseGapSize() {
-    this._gapSize = Math.max(this._gapSize - GAP_SIZE_INCREMENTS, 0)
+    this._gapSize = Math.max(this._gapSize - this._gapSizeIncrements, 0)
     this._notifyGapSize()
   }
 
   _increaseGapSize() {
-    this._gapSize = Math.min(this._gapSize + GAP_SIZE_INCREMENTS, GAP_SIZE_MAX)
+    this._gapSize = Math.min(this._gapSize + this._gapSizeIncrements, GAP_SIZE_MAX)
     this._notifyGapSize()
   }
 
@@ -164,13 +178,13 @@ class Extension {
 
   _notifyGapSize() {
     const gapSize = this._gapSize
-    Main.notify(
-      Me.metadata.name,
+    Main.osdWindowManager.show(-1,this._osdGapChangedIcon,
       ngettext(
         'Gap size is now at %d percent',
         'Gap size is now at %d percent',
         gapSize
-      ).format(gapSize)
+      ).format(gapSize),
+      null,null,null
     )
   }
 
@@ -194,6 +208,10 @@ class Extension {
 
   get _isWindowAnimationEnabled() {
     return this._settings.get_boolean("enable-window-animation")
+  }
+
+  get _nextStepTimeout() {
+    return this._settings.get_int("next-step-timeout")
   }
 
   _captureWindow(window_actor,rect) {
@@ -236,8 +254,16 @@ class Extension {
   }
 
   // give time to redraw it selfs to application
-  _delayFrames() {
-    return new Promise(r=>GLib.timeout_add(GLib.PRIORITY_LOW,60,r))
+  _delayFrames(actor) {
+    return new Promise(resolve=>{
+      const timeline = actor.timeline = new Clutter.Timeline({ actor:actor,duration: 1000 })
+      timeline.connect("new-frame",()=>{
+        timeline.run_dispose()
+        actor.timeline = null
+        resolve()
+      })
+      timeline.start()
+    })
   }
 
   async _setWindowRect(window, x, y, width, height, animate) {
@@ -245,6 +271,8 @@ class Extension {
     const outterRectBefore = window.get_buffer_rect()
     const actor = window.get_compositor_private()
     const isMaximized = window.get_maximized()
+    const lastAnimation = this._windowAnimations.find(item=>item.window === window)
+    const thisAnimation = lastAnimation || {}
     let clone
 
     // unmaximize
@@ -254,17 +282,20 @@ class Extension {
     }
 
     // reset all animations (last ani / unmaximize ani)
-    if (animate && (isMaximized || this._windowAnimations[window])) {
-      this._windowAnimations[window]?.destroy()
+    if (animate && (isMaximized || lastAnimation)) {
+      lastAnimation?.clone?.destroy()
       await this._removeWindowActorAnimation(actor)
     }
 
     // clone window, and resize meta window
-    this._windowAnimations[window] = animate && (clone ??= this._captureWindow(actor,outterRectBefore))
+    thisAnimation.clone = animate && (clone ??= this._captureWindow(actor,outterRectBefore))
+    thisAnimation.window = window
+    thisAnimation.actor = actor
     window.move_resize_frame(false, x, y, width, height)
     if (!animate) {
       return
     }
+    if (!lastAnimation) this._windowAnimations.push(thisAnimation)
 
     // Calculate before size / position
     const cloneGoalScaleX = width/innerRectBefore.width
@@ -277,8 +308,8 @@ class Extension {
     // draw clone, and wait for real window finish drawn
     global.window_group.insert_child_above(clone,actor)
     actor.visible = false
-    await this._delayFrames()
-    if (this._windowAnimations[window] != clone) {
+    await this._delayFrames(actor)
+    if (this._windowAnimations.find(item=>item.window === window).clone != clone) {
       clone.destroy()
       return
     }
@@ -301,9 +332,10 @@ class Extension {
       duration: 300,
       mode: Clutter.AnimationMode.EASE_OUT_QUART,
       onComplete: async()=>{
-        if (this._windowAnimations[window] === clone) {
-          this._windowAnimations[window].destroy()
-          this._windowAnimations[window] = null
+        const nowAnimation = this._windowAnimations.find(item=>item.window === window)
+        if (nowAnimation && nowAnimation.clone === clone) {
+          nowAnimation?.clone?.destroy()
+          this._windowAnimations.splice(this._windowAnimations.indexOf(nowAnimation),1)
         }
       }
     })
@@ -336,7 +368,7 @@ class Extension {
     const successive =
       prev &&
       prev.windowId === windowId &&
-      time - prev.time <= TILING_SUCCESSIVE_TIMEOUT &&
+      time - prev.time <= this._nextStepTimeout &&
       prev.top === top &&
       prev.bottom === bottom &&
       prev.left === left &&
