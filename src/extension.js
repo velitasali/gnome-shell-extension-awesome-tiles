@@ -85,8 +85,7 @@ class Extension {
       workspaceArea.y + ((workspaceArea.height - windowArea.height) / 2),
     )
 
-    window.unmaximize(Meta.MaximizeFlags.BOTH)
-    window.move_frame(false, x, y)
+    this._windowMover._setWindowRect(window, x, y, windowArea.width, windowArea.height, this._isWindowAnimationEnabled)
   }
 
   _bindShortcut(name, callback) {
