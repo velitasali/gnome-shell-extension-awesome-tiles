@@ -234,7 +234,7 @@ class Extension {
     let iteration = successive ? prev.iteration : 0
     let rect = this._computeWindowRect(window, top, bottom, left, right, steps[iteration], center)
 
-    // Ensure the new window size differs from the previous one.
+    // Iterate through the tiling steps until we find one that changes the window size.
     for (const end = iteration; successive && _isRectEqual(rect, prev.rect);) {
       iteration = (iteration + 1) % steps.length
       if (iteration === end)
