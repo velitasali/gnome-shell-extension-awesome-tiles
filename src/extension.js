@@ -41,6 +41,10 @@ function init() {
   return new Extension()
 }
 
+function _isRectEqual(lhs, rhs) {
+  return lhs.x === rhs.x && lhs.y === rhs.y && lhs.width === rhs.width && lhs.height === rhs.height
+}
+
 class Extension {
   enable() {
     this._windowMover = new WindowMover()
@@ -207,6 +211,12 @@ class Extension {
     const window = global.display.get_focus_window()
     if (!window) return
 
+    const { x, y, width, height } = this._nextWindowRect(window, top, bottom, left, right)
+
+    this._windowMover._setWindowRect(window, x, y, width, height, this._isWindowAnimationEnabled)
+  }
+
+  _nextWindowRect(window, top, bottom, left, right) {
     const time = Date.now()
     const center = !(top || bottom || left || right)
     const prev = this._previousTilingOperation
@@ -221,8 +231,26 @@ class Extension {
       prev.left === left &&
       prev.right === right &&
       prev.iteration < steps.length
-    const iteration = successive ? prev.iteration : 0
-    const step = 1.0 - steps[iteration]
+    let iteration = successive ? prev.iteration : 0
+    let rect = this._computeWindowRect(window, top, bottom, left, right, steps[iteration], center)
+
+    // Iterate through the tiling steps until we find one that changes the window size.
+    for (const end = iteration; successive && _isRectEqual(rect, prev.rect);) {
+      iteration = (iteration + 1) % steps.length
+      if (iteration === end)
+        break;
+      rect = this._computeWindowRect(window, top, bottom, left, right, steps[iteration], center)
+    }
+
+    this._previousTilingOperation =
+      { windowId, top, bottom, left, right, rect, time, iteration: iteration + 1 }
+
+    return rect
+  }
+
+  _computeWindowRect(window, top, bottom, left, right, step, center) {
+    const widthFactor = 1.0 - step[0]
+    const heightFactor = step.length > 1 ? (1.0 - step[1]) : widthFactor
 
     const workArea = this._calculateWorkspaceArea(window)
     let { x, y, width, height } = workArea
@@ -233,17 +261,17 @@ class Extension {
       const monitor = window.get_monitor()
       const monitorGeometry = global.display.get_monitor_geometry(monitor)
       const isVertical = monitorGeometry.width < monitorGeometry.height
-      const widthStep = isVertical ? step / 2 : step
-      const heightStep = isVertical ? step : step / 2
+      const centerTilingWidthFactor = isVertical ? widthFactor / 2 : widthFactor
+      const centerTilingHeightFactor = isVertical ? heightFactor : heightFactor / 2
 
-      width -= width * widthStep
-      height -= height * heightStep
+      width -= width * centerTilingWidthFactor
+      height -= height * centerTilingHeightFactor
       x += (workArea.width - width) / 2
       y += (workArea.height - height) / 2
 
     } else {
-      if (left !== right) width -= width * step
-      if (top !== bottom) height -= height * step
+      if (left !== right) width -= width * widthFactor
+      if (top !== bottom) height -= height * heightFactor
       if (!left) x += (workArea.width - width) / (right ? 1 : 2)
       if (!top) y += (workArea.height - height) / (bottom ? 1 : 2)
 
@@ -263,10 +291,8 @@ class Extension {
     y = Math.round(y)
     width = Math.round(width)
     height = Math.round(height)
-    this._windowMover._setWindowRect(window, x, y, width, height, this._isWindowAnimationEnabled)
 
-    this._previousTilingOperation =
-      { windowId, top, bottom, left, right, time, iteration: iteration + 1 }
+    return { x, y, width, height }
   }
 
   _tileWindowBottom() {
