@@ -48,11 +48,14 @@ function parseTilingSteps(value, defaultValue) {
     return value
       .split(",")
       .map((step) => {
-        const result = Math.max(0.0, Math.min(1.0, parseFloat(step.trim())))
-        if (isNaN(result) || typeof result !== 'number') {
-          throw new Error("Expected a number")
-        }
-        return result
+        const numbers = step.split(";").map((str) => {
+          const number = Math.max(0.0, Math.min(1.0, parseFloat(str.trim())))
+          if (isNaN(number) || typeof number !== 'number') {
+            throw new Error("Expected a number")
+          }
+          return number
+        })
+        return numbers
       })
   } catch {
     return defaultValue
