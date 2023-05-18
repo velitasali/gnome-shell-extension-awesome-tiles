@@ -249,8 +249,8 @@ class Extension {
   }
 
   _computeWindowRect(window, top, bottom, left, right, step, center) {
-    const stepWidth = 1.0 - step[0]
-    const stepHeight = step.length > 1 ? (1.0 - step[1]) : stepWidth
+    const widthFactor = 1.0 - step[0]
+    const heightFactor = step.length > 1 ? (1.0 - step[1]) : widthFactor
 
     const workArea = this._calculateWorkspaceArea(window)
     let { x, y, width, height } = workArea
@@ -261,17 +261,17 @@ class Extension {
       const monitor = window.get_monitor()
       const monitorGeometry = global.display.get_monitor_geometry(monitor)
       const isVertical = monitorGeometry.width < monitorGeometry.height
-      const widthStep = isVertical ? stepWidth / 2 : stepWidth
-      const heightStep = isVertical ? stepHeight : stepHeight / 2
+      const centerTilingWidthFactor = isVertical ? widthFactor / 2 : widthFactor
+      const centerTilingHeightFactor = isVertical ? heightFactor : heightFactor / 2
 
-      width -= width * widthStep
-      height -= height * heightStep
+      width -= width * centerTilingWidthFactor
+      height -= height * centerTilingHeightFactor
       x += (workArea.width - width) / 2
       y += (workArea.height - height) / 2
 
     } else {
-      if (left !== right) width -= width * stepWidth
-      if (top !== bottom) height -= height * stepHeight
+      if (left !== right) width -= width * widthFactor
+      if (top !== bottom) height -= height * heightFactor
       if (!left) x += (workArea.width - width) / (right ? 1 : 2)
       if (!top) y += (workArea.height - height) / (bottom ? 1 : 2)
 
