@@ -17,38 +17,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-const ExtensionUtils = imports.misc.extensionUtils
-const Gettext = imports.gettext
-const Main = imports.ui.main
-const { Meta, Shell, Gio } = imports.gi
-
-const Me = ExtensionUtils.getCurrentExtension()
-const {
+import Meta from 'gi://Meta'
+import Shell from 'gi://Shell'
+import Gio from 'gi://Gio'
+import { Extension, ngettext } from 'resource:///org/gnome/shell/extensions/extension.js'
+import { osdWindowManager, wm } from 'resource:///org/gnome/shell/ui/main.js';
+import * as windowMover from './windowMover.js';
+import {
   GAP_SIZE_MAX,
-  GAP_SIZE_INCREMENTS,
   TILING_STEPS_CENTER,
   TILING_STEPS_SIDE,
-  TILING_SUCCESSIVE_TIMEOUT,
-} = Me.imports.constants
-const { parseTilingSteps } = Me.imports.utils
-const { WindowMover } = Me.imports.windowMover
+} from './constants.js'
+import { isRectEqual, parseTilingSteps } from  './utils.js'
 
-const Domain = Gettext.domain(Me.metadata.uuid)
-const { ngettext } = Domain
-
-function init() {
-  ExtensionUtils.initTranslations(Me.metadata.uuid)
-  return new Extension()
-}
-
-function _isRectEqual(lhs, rhs) {
-  return lhs.x === rhs.x && lhs.y === rhs.y && lhs.width === rhs.width && lhs.height === rhs.height
-}
-
-class Extension {
+export default class AwesomeTilesExtension extends Extension {
   enable() {
-    this._windowMover = new WindowMover()
-    this._settings = ExtensionUtils.getSettings()
+    this._windowMover = new windowMover.WindowMover()
+    this._settings = this.getSettings()
     this._osdGapChangedIcon = Gio.icon_new_for_string("view-grid-symbolic")
     this._shortcutsBindingIds = []
 
@@ -69,7 +54,7 @@ class Extension {
   disable() {
     this._windowMover.destroy()
     this._osdGapChangedIcon.run_dispose()
-    this._shortcutsBindingIds.forEach((id) => Main.wm.removeKeybinding(id))
+    this._shortcutsBindingIds.forEach((id) => wm.removeKeybinding(id))
     this._shortcutsBindingIds = this._settings = this._windowMover = this._osdGapChangedIcon = null
   }
 
@@ -95,7 +80,7 @@ class Extension {
   _bindShortcut(name, callback) {
     const mode = Shell.hasOwnProperty('ActionMode') ? Shell.ActionMode : Shell.KeyBindingMode
 
-    Main.wm.addKeybinding(
+    wm.addKeybinding(
       name,
       this._settings,
       Meta.KeyBindingFlags.NONE,
@@ -171,7 +156,7 @@ class Extension {
 
   _notifyGapSize() {
     const gapSize = this._gapSize
-    Main.osdWindowManager.show(-1,this._osdGapChangedIcon,
+    osdWindowManager.show(-1,this._osdGapChangedIcon,
       ngettext(
         'Gap size is now at %d percent',
         'Gap size is now at %d percent',
@@ -235,7 +220,7 @@ class Extension {
     let rect = this._computeWindowRect(window, top, bottom, left, right, steps[iteration], center)
 
     // Iterate through the tiling steps until we find one that changes the window size.
-    for (const end = iteration; successive && _isRectEqual(rect, prev.rect);) {
+    for (const end = iteration; successive && isRectEqual(rect, prev.rect);) {
       iteration = (iteration + 1) % steps.length
       if (iteration === end)
         break;

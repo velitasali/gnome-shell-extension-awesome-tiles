@@ -1,7 +1,8 @@
+import Clutter from 'gi://Clutter'
+import Gio from 'gi://Gio'
+import Meta from 'gi://Meta'
 
-const { Meta, Clutter, Gio } = imports.gi
-
-var WindowMover = class WindowMover {
+export class WindowMover {
   constructor() {
     this._windowAnimations = []
     this._desktopSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' })

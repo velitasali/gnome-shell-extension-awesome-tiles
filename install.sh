@@ -12,22 +12,30 @@ NAME=awesome-tiles\@velitasali.com
 function pack-extension {
     echo "Packing extension..."
     gnome-extensions pack src \
-    --force \
-    --podir="../po" \
-    --extra-source="constants.js" \
-    --extra-source="prefs.ui" \
-    --extra-source="prefs-shortcut-dialog.ui" \
-    --extra-source="utils.js" \
-    --extra-source="windowMover.js" \
-    --extra-source="../LICENSE"
+        --force \
+        --podir="../po" \
+        --extra-source="constants.js" \
+        --extra-source="utils.js" \
+        --extra-source="windowMover.js" \
+        --extra-source="prefs-shortcut-dialog.ui" \
+        --extra-source="../LICENSE"
 }
 
 function compile-preferences {
+    if [ -d src/resources ]; then
+        echo 'Compiling resources...'
+        glib-compile-resources --sourcedir=src/resources \
+            --target=src/resources/prefs.gresource \
+            src/resources/org.gnome.shell.extensions.awesome-tiles.prefs.gresource.xml
+    else
+        echo 'No resources to compile... Skipping'
+    fi
+
     if [ -d src/schemas ]; then
-        echo 'Compiling preferences...'
+        echo 'Compiling schemas...'
         glib-compile-schemas --targetdir=src/schemas src/schemas
     else
-        echo 'No preferences to compile... Skipping'
+        echo 'No schemas to compile... Skipping'
     fi
 }
 
