@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 05:15+0900\n"
+"POT-Creation-Date: 2023-10-31 01:00+0300\n"
 "PO-Revision-Date: 2023-10-16 13:34+0200\n"
 "Last-Translator: Louise\n"
 "Language-Team: France\n"
@@ -18,179 +18,243 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.4\n"
 
-#: src/prefs.js:145
-msgid "Disabled"
-msgstr "Désactiver"
-
-#: src/prefs.ui:34
-msgid "Enable window animation"
-msgstr "Activer l'animation des fenêtres"
-
-#: src/prefs.ui:41
-msgid "Add animation on windows. (In Wayland, this option will very buggy)"
-msgstr ""
-"Ajouter une animation de fenêtre (sous Wayland, cette option sera très "
-"buguée)"
-
-#: src/prefs.ui:79
-msgid "Gap Between Window and Workspace"
-msgstr "Espace entre une fenêtre et le Workspace"
-
-#: src/prefs.ui:86
-msgid "Percentage to leave out as gap when the window in focus is tiled."
-msgstr ""
-"Pourcentage à laisser comme espace quand la fenêtre en focus est "
-"dimensionnée."
-
-#: src/prefs.ui:124
-msgid "Keybinding iterate timeout"
-msgstr "Délai d'expiration de saisie"
-
-#: src/prefs.ui:131
-msgid ""
-"Maximum time of you can adjust tiling step by iterating same keybinding in "
-"milliseconds."
-msgstr ""
-"Temps maximum durant lequel vous pouvez ajuster l’étape de dimensionnement "
-"en itérant la même touche (en millisecondes)."
-
-#: src/prefs.ui:176
-msgid "Gap Size Increments"
-msgstr "Incrément de la Taille de l'Écart"
-
-#: src/prefs.ui:183
-msgid "Determine how much gap size adjust by keybinding."
-msgstr "Déterminer la taille de l'espace a ajuster par la touche."
-
-#: src/prefs.ui:228
-msgid "Gaps Between Windows"
-msgstr "Espace Entre les Fenêtres"
-
-#: src/prefs.ui:235
-msgid "Put gaps between windows."
-msgstr "Mettre des espaces entre les fenêtres."
-
-#: src/prefs.ui:273
-msgid "Center Tiling Steps"
-msgstr "Étapes du Dimensionnement  Central"
-
-#: src/prefs.ui:280 src/prefs.ui:326
-msgid "Steps on each key press (values between 0-1)."
-msgstr "Étapes entre chaque touche appuyée (valeurs entre 0 - 1)"
-
-#: src/prefs.ui:319
-msgid "Side Tiling Steps"
-msgstr "Étapes du Dimensionnement Latéral"
-
-#: src/prefs.ui:365
-msgid "Align Window to Center"
-msgstr "Centrer la Fenêtre"
-
-#: src/prefs.ui:372
-msgid "Shortcut to align the window in focus to center without resizing it."
-msgstr "Raccourci pour centrer la fenêtre en focus  sans la redimensionner."
-
-#: src/prefs.ui:412
-msgid "Increase the Gap Size"
-msgstr "Augmenter l'Espace Vide"
-
-#: src/prefs.ui:419
-msgid "Shortcut to increase the gap size."
-msgstr "Raccourci pour augmenter l'espace vide."
-
-#: src/prefs.ui:459
-msgid "Decrease the Gap Size"
-msgstr "Réduire l'Espace Vide"
-
-#: src/prefs.ui:466
-msgid "Shortcut to decrease the gap size."
-msgstr "Raccourci pour réduire l'espace vide."
-
-#: src/prefs.ui:506
-msgid "Tile Window to Center"
-msgstr "Placer la Fenêtre au Centre"
-
-#: src/prefs.ui:513
-msgid "Shortcut to tile the window in focus to center."
-msgstr "Raccourci pour centrer la fenêtre en focus."
-
-#: src/prefs.ui:553
-msgid "Tile Window to Left"
-msgstr "Placer la Fenêtre à Gauche"
-
-#: src/prefs.ui:560
-msgid "Shortcut to tile the window in focus to left."
-msgstr "Raccourci pour placer la fenêtre en focus à gauche."
-
-#: src/prefs.ui:600
-msgid "Tile Window to Right"
-msgstr "Placer la Fenêtre à Droite"
-
-#: src/prefs.ui:607
-msgid "Shortcut to tile the window in focus to right."
-msgstr "Raccourci pour placer la fenêtre en focus à droite."
-
-#: src/prefs.ui:647
-msgid "Tile Window to Top"
-msgstr "Placer la Fenêtre en Haut"
-
-#: src/prefs.ui:654
-msgid "Shortcut to tile the window in focus to top."
-msgstr "Raccourci pour placer la fenêtre en focus en haut."
-
-#: src/prefs.ui:694
-msgid "Tile Window to Bottom"
-msgstr "Placer la Fenêtre en Bas"
-
-#: src/prefs.ui:701
-msgid "Shortcut to tile the window in focus to bottom."
-msgstr "Raccourci pour placer la fenêtre en bas."
-
-#: src/prefs.ui:741
-msgid "Tile Window to Top Left"
-msgstr "Placer la Fenêtre en Haut à Gauche"
-
-#: src/prefs.ui:748
-msgid "Shortcut to tile the window in focus to top left."
-msgstr "Raccourci pour placer la fenêtre en focus en haut à gauche."
-
-#: src/prefs.ui:788
-msgid "Tile Window to Top Right"
-msgstr "Placer la Fenêtre en Haut à Droite"
-
-#: src/prefs.ui:795
-msgid "Shortcut to tile the window in focus to top right."
-msgstr "Raccourci pour placer la fenêtre en focus en haut à droite."
-
-#: src/prefs.ui:835
-msgid "Tile Window to Bottom Left"
-msgstr "Placer la Fenêtre en Bas à Gauche"
-
-#: src/prefs.ui:842
-msgid "Shortcut to tile the window in focus to bottom left."
-msgstr "Raccourci pour placer la fenêtre en bas à gauche."
-
-#: src/prefs.ui:882
-msgid "Tile Window to Bottom Right"
-msgstr "Placer la Fenêtre en Bas à Droite"
-
-#: src/prefs.ui:889
-msgid "Shortcut to tile the window in focus to bottom right."
-msgstr "Raccourci pour placer la fenêtre en focus en bas à droite."
-
 #: src/prefs-shortcut-dialog.ui:19
 msgid "Press your keyboard shortcut or 'Backspace' to disable..."
-msgstr ""
-"Appuyer sur votre raccourci clavier ou \"retour arrière\" pour "
-"désactiver..."
+msgstr "Appuyer sur votre raccourci clavier ou \"retour arrière\" pour désactiver..."
 
 #: src/prefs-shortcut-dialog.ui:28
 msgid "Keyboard Shortcut"
 msgstr "Raccourci Clavier"
 
-#: src/extension.js:183
+#: src/prefs.js:32
+msgid "General"
+msgstr ""
+
+#: src/prefs.js:49
+msgid "Behavior"
+msgstr ""
+
+#: src/prefs.js:53
+msgid "Enable Window Animations"
+msgstr ""
+
+#: src/prefs.js:54
+msgid "Animate windows when resized or repositioned (this may be buggy on Wayland)."
+msgstr ""
+
+#: src/prefs.js:65
+msgid "Shortcut Iteration Timeout in Milliseconds"
+msgstr ""
+
+#: src/prefs.js:66
+msgid "The time window to consider a new key press an iteration."
+msgstr ""
+
+#: src/prefs.js:85
+msgid "Center Tiling Steps"
+msgstr "Étapes du Dimensionnement  Central"
+
+#: src/prefs.js:86 src/prefs.js:102
+msgid "Steps on each key press (values between 0-1)."
+msgstr "Étapes entre chaque touche appuyée (valeurs entre 0 - 1)"
+
+#: src/prefs.js:101
+msgid "Side Tiling Steps"
+msgstr "Étapes du Dimensionnement Latéral"
+
+#: src/prefs.js:118
+msgid "Gaps"
+msgstr ""
+
+#: src/prefs.js:122
+msgid "Gaps Between Windows"
+msgstr "Espace Entre les Fenêtres"
+
+#: src/prefs.js:123
+msgid "Put gaps between windows."
+msgstr "Mettre des espaces entre les fenêtres."
+
+#: src/prefs.js:134
+msgid "Gap Between Window and Workspace"
+msgstr "Espace entre une fenêtre et le Workspace"
+
+#: src/prefs.js:135
+msgid "Percentage to leave out as gap when a window is tiled."
+msgstr ""
+
+#: src/prefs.js:151
+msgid "Gap Size Increments"
+msgstr "Incrément de la Taille de l'Écart"
+
+#: src/prefs.js:152
+msgid "The change that the shorcuts make in the gap size."
+msgstr ""
+
+#: src/prefs.js:172
+msgid "Shortcuts"
+msgstr ""
+
+#: src/prefs.js:173
+msgid "Assign shortcuts to the functionalities"
+msgstr ""
+
+#: src/prefs.js:181
+msgid "Align Window to Center"
+msgstr "Centrer la Fenêtre"
+
+#: src/prefs.js:182
+msgid "Shortcut to align the active window to center without resizing it."
+msgstr ""
+
+#: src/prefs.js:192
+msgid "Increase Gap Size"
+msgstr ""
+
+#: src/prefs.js:193
+msgid "Shortcut to increase the gap size."
+msgstr "Raccourci pour augmenter l'espace vide."
+
+#: src/prefs.js:203
+msgid "Decrease Gap Size"
+msgstr ""
+
+#: src/prefs.js:204
+msgid "Shortcut to decrease the gap size."
+msgstr "Raccourci pour réduire l'espace vide."
+
+#: src/prefs.js:214
+msgid "Tile Window to Center"
+msgstr "Placer la Fenêtre au Centre"
+
+#: src/prefs.js:215
+msgid "Shortcut to tile active window to center."
+msgstr ""
+
+#: src/prefs.js:225
+msgid "Tile Window to Left"
+msgstr "Placer la Fenêtre à Gauche"
+
+#: src/prefs.js:226
+msgid "Shortcut to tile the active window to left."
+msgstr ""
+
+#: src/prefs.js:236
+msgid "Tile Window to Right"
+msgstr "Placer la Fenêtre à Droite"
+
+#: src/prefs.js:237
+msgid "Shortcut to tile the active window to right."
+msgstr ""
+
+#: src/prefs.js:247
+msgid "Tile Window to Top"
+msgstr "Placer la Fenêtre en Haut"
+
+#: src/prefs.js:248
+msgid "Shortcut to tile the active window to top."
+msgstr ""
+
+#: src/prefs.js:258
+msgid "Tile Window to Bottom"
+msgstr "Placer la Fenêtre en Bas"
+
+#: src/prefs.js:259
+msgid "Shortcut to tile the active window to bottom."
+msgstr ""
+
+#: src/prefs.js:269
+msgid "Tile Window to Top Left"
+msgstr "Placer la Fenêtre en Haut à Gauche"
+
+#: src/prefs.js:270
+msgid "Shortcut to tile the active window to top left."
+msgstr ""
+
+#: src/prefs.js:280
+msgid "Tile Window to Top Right"
+msgstr "Placer la Fenêtre en Haut à Droite"
+
+#: src/prefs.js:281
+msgid "Shortcut to tile the active window to top right."
+msgstr ""
+
+#: src/prefs.js:292
+msgid "Tile Window to Bottom Left"
+msgstr "Placer la Fenêtre en Bas à Gauche"
+
+#: src/prefs.js:293
+msgid "Shortcut to tile the active window to bottom left."
+msgstr ""
+
+#: src/prefs.js:303
+msgid "Tile Window to Bottom Right"
+msgstr "Placer la Fenêtre en Bas à Droite"
+
+#: src/prefs.js:304
+msgid "Shortcut to tile the active window to bottom right."
+msgstr ""
+
+#: src/prefs.js:347
+msgid "Disabled"
+msgstr "Désactiver"
+
+#: src/extension.js:161
 #, javascript-format
 msgid "Gap size is now at %d percent"
 msgid_plural "Gap size is now at %d percent"
 msgstr[0] "L'espace est maintenant de %d pourcent"
 msgstr[1] "L'espace est maintenant de %d pourcent"
+
+#~ msgid "Enable window animation"
+#~ msgstr "Activer l'animation des fenêtres"
+
+#~ msgid "Add animation on windows. (In Wayland, this option will very buggy)"
+#~ msgstr "Ajouter une animation de fenêtre (sous Wayland, cette option sera très buguée)"
+
+#~ msgid "Percentage to leave out as gap when the window in focus is tiled."
+#~ msgstr "Pourcentage à laisser comme espace quand la fenêtre en focus est dimensionnée."
+
+#~ msgid "Keybinding iterate timeout"
+#~ msgstr "Délai d'expiration de saisie"
+
+#~ msgid "Maximum time of you can adjust tiling step by iterating same keybinding in milliseconds."
+#~ msgstr "Temps maximum durant lequel vous pouvez ajuster l’étape de dimensionnement en itérant la même touche (en millisecondes)."
+
+#~ msgid "Determine how much gap size adjust by keybinding."
+#~ msgstr "Déterminer la taille de l'espace a ajuster par la touche."
+
+#~ msgid "Shortcut to align the window in focus to center without resizing it."
+#~ msgstr "Raccourci pour centrer la fenêtre en focus  sans la redimensionner."
+
+#~ msgid "Increase the Gap Size"
+#~ msgstr "Augmenter l'Espace Vide"
+
+#~ msgid "Decrease the Gap Size"
+#~ msgstr "Réduire l'Espace Vide"
+
+#~ msgid "Shortcut to tile the window in focus to center."
+#~ msgstr "Raccourci pour centrer la fenêtre en focus."
+
+#~ msgid "Shortcut to tile the window in focus to left."
+#~ msgstr "Raccourci pour placer la fenêtre en focus à gauche."
+
+#~ msgid "Shortcut to tile the window in focus to right."
+#~ msgstr "Raccourci pour placer la fenêtre en focus à droite."
+
+#~ msgid "Shortcut to tile the window in focus to top."
+#~ msgstr "Raccourci pour placer la fenêtre en focus en haut."
+
+#~ msgid "Shortcut to tile the window in focus to bottom."
+#~ msgstr "Raccourci pour placer la fenêtre en bas."
+
+#~ msgid "Shortcut to tile the window in focus to top left."
+#~ msgstr "Raccourci pour placer la fenêtre en focus en haut à gauche."
+
+#~ msgid "Shortcut to tile the window in focus to top right."
+#~ msgstr "Raccourci pour placer la fenêtre en focus en haut à droite."
+
+#~ msgid "Shortcut to tile the window in focus to bottom left."
+#~ msgstr "Raccourci pour placer la fenêtre en bas à gauche."
+
+#~ msgid "Shortcut to tile the window in focus to bottom right."
+#~ msgstr "Raccourci pour placer la fenêtre en focus en bas à droite."

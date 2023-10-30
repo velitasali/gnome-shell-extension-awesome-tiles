@@ -1,6 +1,7 @@
-const { Gdk, Gtk } = imports.gi
+import Gdk from 'gi://Gdk'
+import Gtk from 'gi://Gtk'
 
-function isKeyvalForbidden(keyval) {
+export function isKeyvalForbidden(keyval) {
   const forbiddenKeyvals = [
     Gdk.KEY_Home,
     Gdk.KEY_Left,
@@ -18,7 +19,7 @@ function isKeyvalForbidden(keyval) {
   return forbiddenKeyvals.includes(keyval)
 }
 
-function isBindingValid({ mask, keycode, keyval }) {
+export function isBindingValid({ mask, keycode, keyval }) {
   if ((mask === 0 || mask === Gdk.SHIFT_MASK) && keycode !== 0) {
     if (
       (keyval >= Gdk.KEY_a && keyval <= Gdk.KEY_z)
@@ -39,11 +40,15 @@ function isBindingValid({ mask, keycode, keyval }) {
   return true
 }
 
-function isAccelValid({ mask, keyval }) {
+export function isAccelValid({ mask, keyval }) {
   return Gtk.accelerator_valid(keyval, mask) || (keyval === Gdk.KEY_Tab && mask !== 0)
 }
 
-function parseTilingSteps(value, defaultValue) {
+export function isRectEqual(lhs, rhs) {
+  return lhs.x === rhs.x && lhs.y === rhs.y && lhs.width === rhs.width && lhs.height === rhs.height
+}
+
+export function parseTilingSteps(value, defaultValue) {
   try {
     return value
       .split(",")
