@@ -13,11 +13,9 @@ export class WindowMover {
       animation.clone?.destroy()
       const actor = animation.actor
       if (actor) {
-        actor.timeline?.run_dispose()
         actor.timeline = null
       }
     })
-    this._desktopSettings.run_dispose()
     this._desktopSettings = this._windowAnimations = null
   }
 
@@ -49,7 +47,6 @@ export class WindowMover {
       let count = 0
       timeline.connect("new-frame",()=>{
         if (++count<=5) return
-        timeline.run_dispose()
         actor.timeline = null
         resolve()
       })
@@ -69,7 +66,6 @@ export class WindowMover {
       if (animation.newFrameEvent) animation.timer.disconnect(animation.newFrameEvent)
       if (animation.completedEvent) animation.timer.disconnect(animation.completedEvent)
     }
-    animation.timer.run_dispose()
     const index = this._windowAnimations.indexOf(animation)
     if (index != -1) this._windowAnimations.splice(index,1)
   }

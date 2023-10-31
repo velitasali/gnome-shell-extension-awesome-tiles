@@ -53,7 +53,6 @@ export default class AwesomeTilesExtension extends Extension {
 
   disable() {
     this._windowMover.destroy()
-    this._osdGapChangedIcon.run_dispose()
     this._shortcutsBindingIds.forEach((id) => wm.removeKeybinding(id))
     this._shortcutsBindingIds = this._settings = this._windowMover = this._osdGapChangedIcon = null
   }
