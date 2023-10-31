@@ -23,7 +23,7 @@ import GLib from 'gi://GLib'
 import Gtk from 'gi://Gtk'
 import Adw from 'gi://Adw'
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
-import * as Utils from './utils.js'
+import * as Utils from './prefs-utils.js'
 
 export default class AwesomeTilesPreferences extends ExtensionPreferences {
   fillPreferencesWindow(window) {

@@ -15,6 +15,7 @@ function pack-extension {
         --force \
         --podir="../po" \
         --extra-source="constants.js" \
+        --extra-source="prefs-utils.js" \
         --extra-source="utils.js" \
         --extra-source="windowMover.js" \
         --extra-source="prefs-shortcut-dialog.ui" \
