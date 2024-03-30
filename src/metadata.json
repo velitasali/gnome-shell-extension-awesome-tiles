@@ -5,7 +5,8 @@
   "name": "Awesome Tiles",
   "settings-schema": "org.gnome.shell.extensions.awesome-tiles",
   "shell-version": [
-    "45"
+    "45",
+    "46"
   ],
   "url": "https://github.com/velitasali/gnome-awesome-tiles-extension",
   "uuid": "awesome-tiles@velitasali.com",
