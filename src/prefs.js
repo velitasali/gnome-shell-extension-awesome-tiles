@@ -164,6 +164,36 @@ export default class AwesomeTilesPreferences extends ExtensionPreferences {
       Gio.SettingsBindFlags.DEFAULT,
     )
 
+    // Bottom gap settings
+    const bottomGapSwitchRow = new Adw.SwitchRow({
+      title: _('Enable Additional Bottom Gap'),
+      subtitle: _('Add an additional gap at the bottom of the screen to prevent dock overlap.'),
+    })
+    gapsGroup.add(bottomGapSwitchRow)
+    settings.bind(
+      'enable-bottom-gap',
+      bottomGapSwitchRow,
+      'active',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
+    const bottomGapSizeSpinRow = new Adw.SpinRow({
+      title: _('Bottom Gap Size'),
+      subtitle: _('Additional gap size at the bottom of the screen in percentage.'),
+      adjustment: new Gtk.Adjustment({
+        lower: 0,
+        upper: 50,
+        'step-increment': 5,
+      })
+    })
+    gapsGroup.add(bottomGapSizeSpinRow)
+    settings.bind(
+      'bottom-gap-size',
+      bottomGapSizeSpinRow,
+      'value',
+      Gio.SettingsBindFlags.DEFAULT,
+    )
+
     return gapsGroup
   }
 

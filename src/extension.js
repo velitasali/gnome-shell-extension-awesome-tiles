@@ -100,7 +100,7 @@ export default class AwesomeTilesExtension extends Extension {
     const gap = this._gapSize
 
     
-    if (gap <= 0) return {
+    if (gap <= 0 && !this._isBottomGapEnabled) return {
       x: workspaceArea.x,
       y: workspaceArea.y,
       height: workspaceArea.height,
@@ -122,12 +122,19 @@ export default class AwesomeTilesExtension extends Extension {
       gaps.y = temp
     }
     
+    // Calculate additional bottom gap if enabled
+    let bottomGap = 0
+    if (this._isBottomGapEnabled) {
+      bottomGap = Math.round(this._bottomGapSize / 100 * workspaceArea.height)
+    }
+    
     return {
       x: workspaceArea.x + gaps.x,
       y: workspaceArea.y + gaps.y,
-      height: workspaceArea.height - (gaps.y * 2),
+      height: workspaceArea.height - (gaps.y * 2) - bottomGap,
       width: workspaceArea.width - (gaps.x * 2),
       gaps,
+      bottomGap,
     }
   }
 
@@ -167,6 +174,14 @@ export default class AwesomeTilesExtension extends Extension {
 
   get _isInnerGapsEnabled() {
     return this._settings.get_boolean("enable-inner-gaps")
+  }
+
+  get _isBottomGapEnabled() {
+    return this._settings.get_boolean("enable-bottom-gap")
+  }
+
+  get _bottomGapSize() {
+    return this._settings.get_int("bottom-gap-size")
   }
 
   get _tilingStepsCenter() {

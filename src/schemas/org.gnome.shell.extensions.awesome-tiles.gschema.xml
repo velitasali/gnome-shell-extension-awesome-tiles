@@ -137,6 +137,16 @@
       <summary>Gap Size Increments</summary>
       <description>Determine how much gap size adjust by keybinding.</description>
     </key>
+    <key name="enable-bottom-gap" type="b">
+      <default>false</default>
+      <summary>Enable Additional Bottom Gap</summary>
+      <description>Add an additional gap at the bottom of the screen to prevent dock overlap.</description>
+    </key>
+    <key name="bottom-gap-size" type="i">
+      <default>10</default>
+      <summary>Bottom Gap Size</summary>
+      <description>Additional gap size at the bottom of the screen in percentage.</description>
+    </key>
     <key name="tiling-steps-center" type="s">
       <default><![CDATA['1, 0.75, 0.5']]></default>
       <summary>Center Tiling Steps</summary>
