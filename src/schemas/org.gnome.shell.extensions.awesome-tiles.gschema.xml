@@ -147,6 +147,11 @@
       <summary>Bottom Gap Size</summary>
       <description>Additional gap size at the bottom of the screen in percentage.</description>
     </key>
+    <key name="bottom-gap-main-screen-only" type="b">
+      <default>false</default>
+      <summary>Bottom Gap Main Screen Only</summary>
+      <description>Apply the additional bottom gap only on the main screen.</description>
+    </key>
     <key name="tiling-steps-center" type="s">
       <default><![CDATA['1, 0.75, 0.5']]></default>
       <summary>Center Tiling Steps</summary>

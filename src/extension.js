@@ -125,7 +125,11 @@ export default class AwesomeTilesExtension extends Extension {
     // Calculate additional bottom gap if enabled
     let bottomGap = 0
     if (this._isBottomGapEnabled) {
-      bottomGap = Math.round(this._bottomGapSize / 100 * workspaceArea.height)
+      // Check if bottom gap should only be applied to the main screen
+      const isPrimaryMonitor = monitor === global.display.get_primary_monitor();
+      if (!this._isBottomGapMainScreenOnly || isPrimaryMonitor) {
+        bottomGap = Math.round(this._bottomGapSize / 100 * workspaceArea.height)
+      }
     }
     
     return {
@@ -178,6 +182,10 @@ export default class AwesomeTilesExtension extends Extension {
 
   get _isBottomGapEnabled() {
     return this._settings.get_boolean("enable-bottom-gap")
+  }
+
+  get _isBottomGapMainScreenOnly() {
+    return this._settings.get_boolean("bottom-gap-main-screen-only")
   }
 
   get _bottomGapSize() {
