@@ -1,0 +1,32 @@
+{
+  "name": "gnome-shell-extension-awesome-tiles",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc && cp src/metadata.json src/prefs-shortcut-dialog.ui src/icon.svg build/ && cp -r src/schemas build/",
+    "clean": "rm -rf build",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src"
+  },
+  "devDependencies": {
+    "@girs/adw-1": "1.10.0-4.0.0-rc.15",
+    "@girs/clutter-18": "18.0.0-4.0.0-rc.15",
+    "@girs/gdk-4.0": "4.0.0-4.0.0-rc.15",
+    "@girs/gio-2.0": "2.88.0-4.0.0-rc.15",
+    "@girs/gjs": "4.0.0-rc.15",
+    "@girs/glib-2.0": "2.88.0-4.0.0-rc.15",
+    "@girs/gnome-shell": "50.0.0",
+    "@girs/gtk-4.0": "4.23.0-4.0.0-rc.15",
+    "@girs/meta-18": "18.0.0-4.0.0-rc.15",
+    "@girs/shell-18": "18.0.0-4.0.0-rc.15",
+    "@girs/st-18": "18.0.0-4.0.0-rc.15",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.59.4"
+  },
+  "packageManager": "yarn@4.12.0"
+}

@@ -30,25 +30,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-export function isRectEqual(lhs, rhs) {
-  return lhs.x === rhs.x && lhs.y === rhs.y && lhs.width === rhs.width && lhs.height === rhs.height
-}
-
-export function parseTilingSteps(value, defaultValue) {
-  try {
-    return value
-      .split(",")
-      .map((step) => {
-        const numbers = step.split(";").map((str) => {
-          const number = Math.max(0.0, Math.min(1.0, parseFloat(str.trim())))
-          if (isNaN(number) || typeof number !== 'number') {
-            throw new Error("Expected a number")
-          }
-          return number
-        })
-        return numbers
-      })
-  } catch {
-    return defaultValue
-  }
-}
+export const GAP_SIZE_INCREMENTS = 1;
+export const GAP_SIZE_MAX = 25;
+export const GAP_SIZE_PIXEL_INCREMENTS = 1;
+export const GAP_SIZE_PIXEL_MAX = 125;
+export const BOTTOM_GAP_SIZE_PIXEL_MAX = 125;
+export const INDIVIDUAL_GAP_SIZE_MAX = 25;
+export const INDIVIDUAL_GAP_SIZE_PIXEL_MAX = 125;
+export const TILING_STEPS_CENTER: number[][] = [[1], [0.75], [0.5]];
+export const TILING_STEPS_SIDE: number[][] = [[0.5], [0.65], [0.35]];
