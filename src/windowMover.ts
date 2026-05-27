@@ -59,7 +59,6 @@ export class WindowMover {
       window.move_resize_frame(true, x, y, width, height);
       return;
     }
-    const oldRect = window.get_frame_rect();
 
     const isMaximized =
       window.is_maximized() || window.maximized_horizontally || window.maximized_vertically;
@@ -71,40 +70,46 @@ export class WindowMover {
       if (wasAnimationsEnabled) this.desktopSettings.set_boolean("enable-animations", true);
     }
 
-    const changeX = oldRect.x - x;
-    const changeY = oldRect.y - y;
-    const scaleX = oldRect.width / width;
-    const scaleY = oldRect.height / height;
+    const previousFrameRect = window.get_frame_rect();
+    const previousBufferRect = window.get_buffer_rect();
 
-    actor.remove_all_transitions();
     actor.freeze();
 
-    actor.set({
-      translation_x: changeX,
-      translation_y: changeY,
-      scale_x: scaleX,
-      scale_y: scaleY,
-    });
+    const signalIds: number[] = [];
+    let handled = false;
+
+    const performAfterMoveOrResize = () => {
+      if (handled) return;
+      handled = true;
+      signalIds.forEach((signalId) => window.disconnect(signalId));
+
+      const bufferRect = window.get_buffer_rect();
+
+      actor.set({
+        translation_x: previousBufferRect.x - bufferRect.x,
+        translation_y: previousBufferRect.y - bufferRect.y,
+        scale_x: previousFrameRect.width / width,
+        scale_y: previousFrameRect.height / height,
+      });
+
+      actor.thaw();
+
+      actor.ease({
+        translation_x: 0,
+        translation_y: 0,
+        scale_x: 1,
+        scale_y: 1,
+        duration: 280,
+        mode: Clutter.AnimationMode.EASE_OUT_QUINT,
+        onComplete: () => {},
+      });
+    };
+
+    signalIds.push(
+      window.connect("size-changed", performAfterMoveOrResize),
+      window.connect("position-changed", performAfterMoveOrResize),
+    );
 
     window.move_resize_frame(true, x, y, width, height);
-
-    actor.thaw();
-
-    actor.ease({
-      translation_x: 0,
-      translation_y: 0,
-      scale_x: 1.0,
-      scale_y: 1.0,
-      duration: 280,
-      mode: Clutter.AnimationMode.EASE_OUT_QUINT,
-      onComplete: () => {
-        actor.set({
-          translation_x: 0,
-          translation_y: 0,
-          scale_x: 1.0,
-          scale_y: 1.0,
-        });
-      },
-    });
   }
 }
