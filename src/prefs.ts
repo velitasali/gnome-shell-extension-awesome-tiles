@@ -734,7 +734,12 @@ class PreferencesWindowBuilder {
   private reloadShortcutWidget(widget: Gtk.Button) {
     const { settings } = this;
     const shortcut = settings.get_strv(widget.get_name());
-    widget.label = shortcut?.length > 0 ? shortcut[0] : _("Disabled");
+    if (shortcut?.length > 0) {
+      const [ok, keyval, mods] = Gtk.accelerator_parse(shortcut[0]);
+      widget.label = ok && mods !== null ? Gtk.accelerator_get_label(keyval, mods) : shortcut[0];
+    } else {
+      widget.label = _("Disabled");
+    }
   }
 
   private reloadShortcutWidgets(widgets: Gtk.Button[]) {
