@@ -11,7 +11,7 @@ NAME=awesome-tiles\@velitasali.com
 
 function pack-extension {
     echo "Packing extension..."
-    gnome-extensions pack src \
+    gnome-extensions pack build \
         --force \
         --podir="../po" \
         --extra-source="constants.js" \
@@ -20,7 +20,7 @@ function pack-extension {
         --extra-source="windowMover.js" \
         --extra-source="linkedResize.js" \
         --extra-source="prefs-shortcut-dialog.ui" \
-        --extra-source="../icon.svg" \
+        --extra-source="icon.svg" \
         --extra-source="../LICENSE"
 }
 
@@ -44,7 +44,7 @@ function compile-preferences {
 
 function restart-shell {
     if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-        echo 'Restarting shell on Wayland...'
+        echo 'Cannot restart GNOME Shell automatically on Wayland. Please log out and log back in to apply changes.'
     else
         echo 'Restarting shell on X11...'
         busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…", global.context)'
@@ -61,9 +61,23 @@ function usage() {
     echo '  update-po      Update po files to match source files'
 }
 
+function run-yarn() {
+    if command -v corepack >/dev/null 2>&1; then
+        corepack yarn "$@"
+    elif command -v yarn >/dev/null 2>&1; then
+        yarn "$@"
+    elif command -v npx >/dev/null 2>&1; then
+        npx --yes corepack yarn "$@"
+    else
+        echo 'Error: yarn, corepack, or npx is required to build this extension.' >&2
+        exit 1
+    fi
+}
+
 function update-po() {
     echo '' > messages.po
-    find ./src -type f \( -name "*.ui" -or -name "*.js" \) | xgettext --from-code utf-8 -j messages.po -f -
+    find ./src -type f -name "*.ui" | xgettext --from-code utf-8 -j messages.po -f -
+    find ./src -type f -name "*.ts" | xgettext --language=JavaScript --from-code utf-8 -j messages.po -f -
     sed -i 's|"Content\-Type: text/plain; charset=CHARSET\\n"|"Content-Type: text/plain; charset=UTF-8\\n"|g' messages.po
     find ./po -type f -name "*.po" | xargs -i msgmerge {} messages.po -N --no-wrap -U
     mv messages.po $(find ./po -type f -name "*.pot")
@@ -72,19 +86,23 @@ function update-po() {
 case "$1" in
     "local-install" )
         compile-preferences
+        run-yarn install
+        run-yarn build
         pack-extension
         gnome-extensions install --force $NAME.shell-extension.zip && restart-shell
     ;;
-    
+
     "zip" )
         compile-preferences
+        run-yarn install
+        run-yarn build
         pack-extension
     ;;
 
     "update-po" )
         update-po
     ;;
-    
+
     * )
         usage
     ;;
