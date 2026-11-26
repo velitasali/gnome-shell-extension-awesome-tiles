@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          # packageManager is Yarn, and Corepack is enabled in the next step.
+          # Automatic caching only applies when packageManager is npm.
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Check formatting
+        run: yarn format:check
+
+      - name: Typecheck and build
+        run: yarn build
+
+      - name: Install schema and translation tools
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends gettext libglib2.0-bin
+
+      - name: Validate GSettings schema
+        run: glib-compile-schemas --strict --dry-run src/schemas
+
+      - name: Validate translations
+        shell: bash
+        run: |
+          status=0
+          for file in po/*.po; do
+            echo "$file"
+            msgfmt --check --output-file=/dev/null "$file" || status=1
+          done
+          exit "$status"
