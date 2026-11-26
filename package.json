@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc && cp src/metadata.json src/prefs-shortcut-dialog.ui src/icon.svg build/ && cp -r src/schemas build/",
+    "build": "rm -rf build && tsc && cp src/metadata.json src/prefs-shortcut-dialog.ui src/icon.svg build/ && mkdir -p build/schemas && cp src/schemas/*.xml build/schemas/",
     "clean": "rm -rf build",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",

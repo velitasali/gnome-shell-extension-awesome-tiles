@@ -1,4 +1,6 @@
-# x11docker/gnome (Modern ESM version)
+# Local GNOME desktop for dev/start-dev.sh.
+# Debian trixie ships GNOME 48. After changing this file, run:
+#   ./dev/start-dev.sh rebuild
 FROM debian:trixie
 ENV LANG en_US.UTF-8
 ENV SHELL=/bin/bash
@@ -23,15 +25,15 @@ RUN apt-get update && \
   dbus-x11 \
   libpulse0 \
   procps \
-  psutils \
   systemd \
   inotify-tools \
   x11-xserver-utils && \
   /cleanup
 
 # Gnome
+# Recommends stay installed. A Shell session is missing pieces without them.
 RUN apt-get update && \
-  env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+  env DEBIAN_FRONTEND=noninteractive apt-get install -y \
   gnome-session \
   gnome-shell && \
   /cleanup
@@ -39,10 +41,10 @@ RUN apt-get update && \
 # Gnome apps
 RUN apt-get update && \
   env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-  gedit \
+  gnome-text-editor \
   gnome-terminal \
   gnome-control-center \
-  gnome-tweak-tool \
+  gnome-tweaks \
   nautilus && \
   /cleanup
 
