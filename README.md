@@ -99,6 +99,7 @@ To run the development environment, you need the following packages installed on
 
 - `docker`
 - `x11docker`
+- `nodejs` and `yarn` (Corepack is fine; the repo pins Yarn 4)
 - `inotify-tools` (for the file watcher)
 - `gettext` (for translation compilation)
 - `glib2.0` (for schema compilation)
@@ -112,7 +113,7 @@ To run the development environment, you need the following packages installed on
    ./dev/start-dev.sh
    ```
 
-   This will build the development image (if it doesn't exist), setup the extension, and launch GNOME Shell inside a container.
+   This builds the `awesome-tiles-gnome` image when it is missing (Debian Trixie, GNOME 48), compiles the extension, and launches GNOME Shell inside a container.
 
 2. **Testing different locales**:
    You can specify a language using the `--lang` argument:
@@ -129,14 +130,11 @@ To run the development environment, you need the following packages installed on
 
 ### How it Works (Hot Reload)
 
-The `start-dev.sh` script includes an integrated watcher that monitors the `src/` and `po/` directories:
+The `start-dev.sh` script builds the extension on the host and watches `src/` and `po/`:
 
-- **Watcher**: Uses `inotifywait` to detect file saves.
-- **Syncing**: Automatically syncs `src/` files to the development directory.
-- **Compiling**:
-  - Compiles GSettings schemas using `glib-compile-schemas`.
-  - Compiles `.po` files into `.mo` binaries using `msgfmt`.
-- **Hot Reload**: When a change is detected, the GNOME Shell container is automatically restarted to apply the fresh build immediately.
+- **Build**: Runs `yarn build`, compiles GSettings schemas, compiles `.po` files into `.mo` files, and syncs the `build/` output into the extension directory mounted in the container.
+- **Watcher**: Uses `inotifywait` for writes, creates, deletes, and renames, then waits briefly so one save triggers one rebuild.
+- **Reload**: Asks the running GNOME Shell to restart. If the shell refuses that request, the container is started again. Closing the GNOME window ends the script.
 
 ## Credits
 
